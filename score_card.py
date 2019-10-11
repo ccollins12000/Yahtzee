@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk as tk
+import dice_gui
 
 yahtzee_gui = Tk()
 score_card = tk.Frame(yahtzee_gui)
