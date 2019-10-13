@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import ttk as tk
-import dice_gui
 
 yahtzee_gui = Tk()
 score_card = tk.Frame(yahtzee_gui)
@@ -19,7 +18,6 @@ def create_score_box(lbl, can_assign):
             selector,
             Entry(score_card, width=3, state='disabled')
         ]
-
 
 points = {
     "UPPER SECTION": [tk.Label(score_card, text="UPPER SECTION")],
