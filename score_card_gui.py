@@ -7,6 +7,15 @@ score_card.pack()
 assign_to = StringVar()
 
 
+class ScoreBoxGui:
+    def __init__(self, label, can_assign):
+        self.points = Entry(score_card, width=3)
+        if can_assign:
+            self.selector = tk.Radiobutton(score_card, variable=assign_to, text=label, width=17, value=label)
+        else:
+            self.selector = tk.Label(score_card, text=label, width=17)
+
+
 def create_score_box(lbl, can_assign):
 
     if can_assign:
@@ -19,9 +28,12 @@ def create_score_box(lbl, can_assign):
             Entry(score_card, width=3, state='disabled')
         ]
 
+
+aces_gui = ScoreBoxGui("Aces", True)
+
 points = {
     "UPPER SECTION": [tk.Label(score_card, text="UPPER SECTION")],
-    'Aces': create_score_box('Aces', True),
+    'Aces': [aces_gui.selector, aces_gui.points],
     'Twos': create_score_box('Twos', True),
     "Threes": create_score_box('Threes', True),
     "Fours": create_score_box('Fours', True),
