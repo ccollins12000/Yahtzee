@@ -30,7 +30,23 @@ class Die:
         return self.value
 
 
-
 class Dice:
     def __init__(self):
         self._dice = []
+
+    def add_die(self, die):
+        self._dice.append(die)
+
+    def remove_die(self, index):
+        del self._dice[index]
+
+    def roll(self):
+        for die in self._dice:
+            die.roll()
+
+    def __str__(self):
+        msg = ''
+        for die in self._dice:
+            msg += str(die)
+        return msg
+
