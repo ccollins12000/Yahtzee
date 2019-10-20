@@ -1,4 +1,5 @@
 import abc
+import Die
 
 class ScoreBox:
 
@@ -26,9 +27,13 @@ class ScoreBox:
 
 
 class Aces(ScoreBox):
-    def assign_points(self, value):
+    def assign_points(self, dice):
         if not self.assigned:
-            self._points = value
+            points = 0
+            for die in dice:
+                if die.value == 1:
+                    points += 1
+            self._points = points
             self._assigned = True
 
     def __str__(self):
@@ -36,12 +41,14 @@ class Aces(ScoreBox):
 
 
 
+dice = Dice.Dice()
+for i in range(6):
+    dice.add_die(Die.Die())
 
+aces = Aces()
 
-test = Aces()
-print(test)
-test.assign_points(4)
-print(test)
+print(aces)
+aces.assign_points(dice)
+print(aces)
 
-test.assign_points(5)
-print(test)
+print(dice)
