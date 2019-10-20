@@ -11,7 +11,7 @@ class Die:
         self._value = r.randrange(1, 7)
 
     def __str__(self):
-        return "A die with value of " + str(self.value)
+        return "A die with value of " + str(self.value) + '\n'
 
     @property
     def value(self):
@@ -28,6 +28,54 @@ class Die:
 
     def __int__(self):
         return self.value
+
+    def __lt__(self, other):
+        return self.value < other
+
+    def __le__(self, other):
+        return self.value <= other
+
+    def __eq__(self, other):
+        return self.value == other
+
+    def __ne__(self, other):
+        return self.value != other
+
+    def __ge__(self, other):
+        return self.value >= other
+
+    def __gt__(self, other):
+        return self.value > other
+
+    def __int__(self):
+        return self.value
+
+    # def __long__(self):
+    #     return self.value)
+
+    def __float__(self):
+        return float(self.value)
+
+    def __oct__(self):
+        return oct(self.value)
+
+    def __hex__(self):
+        return hex(self.value)
+
+    def __complex__(self):
+        return complex(self.value)
+
+    def __neg__(self):
+        return -self.value
+
+    def __pos__(self):
+        return self.value
+
+    def __abs__(self):
+        return abs(self.value)
+
+    def __invert__(self):
+        return ~self.value
 
 
 class Dice:
@@ -48,6 +96,9 @@ class Dice:
         for die in self._dice:
             die.roll()
 
+    def sort(self):
+        self._dice.sort()
+
     def __iter__(self):
         self._current_die_index = 0
         return self
@@ -60,9 +111,9 @@ class Dice:
             return self._dice[self._current_die_index - 1]
 
     def __str__(self):
-        msg = ''
+        msg = 'Dice object containing: \n'
         for die in self._dice:
-            msg += str(die)
+            msg += '\t' + str(die)
         return msg
 
 

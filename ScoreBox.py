@@ -39,16 +39,3 @@ class Aces(ScoreBox):
     def __str__(self):
         return 'Aces: ' + str(self._points)
 
-
-
-dice = Dice.Dice()
-for i in range(6):
-    dice.add_die(Die.Die())
-
-aces = Aces()
-
-print(aces)
-aces.assign_points(dice)
-print(aces)
-
-print(dice)
