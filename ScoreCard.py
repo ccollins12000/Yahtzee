@@ -397,3 +397,4 @@ class ScoreCard:
 
     def __gt__(self, other):
         return self._grandTotal > other
+
