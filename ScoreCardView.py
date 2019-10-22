@@ -3,17 +3,14 @@ from tkinter import ttk as tk
 
 yahtzee_gui = Tk()
 yahtzee_gui.title('Yahtzee!')
-score_card = tk.Frame(yahtzee_gui)
-score_card.pack()
-assign_to = StringVar()
 
 
 class ScoreBoxView:
-    def __init__(self, master, label, can_assign):
+    def __init__(self, master, label, can_assign, assignment_var):
         self.frame = tk.Frame(master)
         self.points = Entry(self.frame, width=3, state='disabled')
         if can_assign:
-            self.selector = tk.Radiobutton(self.frame, variable=assign_to, text=label, width=11, value=label)
+            self.selector = tk.Radiobutton(self.frame, variable=assignment_var, text=label, width=11, value=label)
         else:
             self.selector = tk.Label(self.frame, text=label, width=11)
 
@@ -38,61 +35,63 @@ class SectionLabel:
 
 
 class ScoreCardView:
-    def __init__(self):
-        self.text = 0
+    def __init__(self, master):
+        self.mainFrame = tk.Frame(master)
+        self.mainFrame.pack()
+        self.assign_selection = StringVar()
+        self.upperSectionLabelView = SectionLabel(self.mainFrame, "UPPER SECTION")
+        self.acesView = ScoreBoxView(self.mainFrame, "Aces", True, self.assign_selection)
+        self.twosView = ScoreBoxView(self.mainFrame, "Twos", True, self.assign_selection)
+        self.threesView = ScoreBoxView(self.mainFrame, "Threes", True, self.assign_selection)
+        self.foursView = ScoreBoxView(self.mainFrame, "Fours", True, self.assign_selection)
+        self.fivesView = ScoreBoxView(self.mainFrame, "Fives", True, self.assign_selection)
+        self.sixesView = ScoreBoxView(self.mainFrame, "Sixes", True, self.assign_selection)
+        self.totalScoreView = ScoreBoxView(self.mainFrame, "TOTAL SCORE", False, self.assign_selection)
+        self.bonusView = ScoreBoxView(self.mainFrame, "BONUS", False, self.assign_selection)
+        self.upper1TotalView = ScoreBoxView(self.mainFrame, "TOTAL", False, self.assign_selection)
+        self.lowerSectionLabelView = SectionLabel(self.mainFrame, "LOWER SECTION")
+        self.threeOfAKindView = ScoreBoxView(self.mainFrame, "3 of a kind", True, self.assign_selection)
+        self.fourOfAKindView = ScoreBoxView(self.mainFrame, "4 of a kind", True, self.assign_selection)
+        self.fullHouseView = ScoreBoxView(self.mainFrame, "Full House", True, self.assign_selection)
+        self.smallStraightView = ScoreBoxView(self.mainFrame, "Sm. Straight", True, self.assign_selection)
+        self.largeStraightView = ScoreBoxView(self.mainFrame, "Lg. Straight", True, self.assign_selection)
+        self.yahtzeeView = ScoreBoxView(self.mainFrame, "YAHTZEE", True, self.assign_selection)
+        self.chanceView = ScoreBoxView(self.mainFrame, "Chance", True, self.assign_selection)
+        self.lowerTotalView = ScoreBoxView(self.mainFrame, "Total (Lower)", False, self.assign_selection)
+        self.upper2TotalView = ScoreBoxView(self.mainFrame, "Total (Upper)", False, self.assign_selection)
+        self.grandTotalView = ScoreBoxView(self.mainFrame, "GRAND TOTAL", False, self.assign_selection)
+        self.scoreBoxes = [
+            self.upperSectionLabelView,
+            self.acesView,
+            self.twosView,
+            self.threesView,
+            self.foursView,
+            self.fivesView,
+            self.sixesView,
+            self.totalScoreView,
+            self.bonusView,
+            self.upper1TotalView,
+            self.lowerSectionLabelView,
+            self.threeOfAKindView,
+            self.fourOfAKindView,
+            self.fullHouseView,
+            self.smallStraightView,
+            self.largeStraightView,
+            self.yahtzeeView,
+            self.yahtzeeView,
+            self.chanceView,
+            self.lowerTotalView,
+            self.upper2TotalView,
+            self.grandTotalView
+        ]
+        rw = 0
+        for scoreBox in self.scoreBoxes:
+            scoreBox.frame.grid(row=rw, column = 0)
+            rw += 1
 
 
-upperSectionLabel = SectionLabel(score_card, "UPPER SECTION")
-acesView = ScoreBoxView(score_card, "Aces", True)
-twosView = ScoreBoxView(score_card, "Twos", True)
-threesView = ScoreBoxView(score_card, "Threes", True)
-foursView = ScoreBoxView(score_card, "Fours", True)
-fivesView = ScoreBoxView(score_card, "Fives", True)
-sixesView = ScoreBoxView(score_card, "Sixes", True)
-totalScoreView = ScoreBoxView(score_card, "TOTAL SCORE", False)
-bonusView = ScoreBoxView(score_card, "BONUS", False)
-upper1TotalView = ScoreBoxView(score_card, "TOTAL", False)
-lowerSectionLabel = SectionLabel(score_card, "LOWER SECTION")
-threeOfAKindView = ScoreBoxView(score_card, "3 of a kind", True)
-fourOfAKindView = ScoreBoxView(score_card, "4 of a kind", True)
-fullHouseView = ScoreBoxView(score_card, "Full House", True)
-smallStraightView = ScoreBoxView(score_card, "Sm. Straight", True)
-largeStraightView = ScoreBoxView(score_card, "Lg. Straight", True)
-yahtzeeView = ScoreBoxView(score_card, "YAHTZEE", True)
-chanceView = ScoreBoxView(score_card, "Chance", True)
-lowerTotalView = ScoreBoxView(score_card, "Total (Lower)", False)
-upper2TotalView = ScoreBoxView(score_card, "Total (Upper)", False)
-grandTotalView = ScoreBoxView(score_card, "GRAND TOTAL", False)
 
-points = {
-    "UPPER SECTION": upperSectionLabel.frame,
-    'Aces': acesView.frame,
-    'Twos': twosView.frame,
-    "Threes": threesView.frame,
-    "Fours": foursView.frame,
-    "Fives": fivesView.frame,
-    "Sixes": sixesView.frame,
-    "TOTAL SCORE": totalScoreView.frame,
-    "BONUS": bonusView.frame,
-    "TOTAL": upper1TotalView.frame,
-    "LOWER SECTION": lowerSectionLabel.frame,
-    "3 of a kind": threeOfAKindView.frame,
-    "4 of a kind": fourOfAKindView.frame,
-    "Full House": fullHouseView.frame,
-    "Sm. Straight": smallStraightView.frame,
-    "Lg. Straight": largeStraightView.frame,
-    "YAHTZEE": yahtzeeView.frame,
-    "Chance": chanceView.frame,
-    "Total (Lower)": lowerTotalView.frame,
-    "Total (Upper)": upper2TotalView.frame,
-    "GRAND TOTAL": grandTotalView.frame,
-}
-
-rw = 0
-for box in points:
-    #points[box].grid(row=rw, column=0)
-    points[box].pack(side=TOP, expand=True)
-    rw = rw + 1
+score = ScoreCardView(yahtzee_gui)
 
 
 yahtzee_gui.mainloop()
