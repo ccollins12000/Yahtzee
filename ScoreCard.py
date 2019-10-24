@@ -372,10 +372,9 @@ class ScoreCard:
         #Total Points
         self._grandTotal = self._upperTotal + self._lowerTotal
 
-
     def assign_roll(self, box_name, dice):
         for box in self._boxes:
-            if box.name == box_name
+            if box.name == box_name:
                 box.assign_points(dice)
                 break
         self.calculate_points()

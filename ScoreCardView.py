@@ -52,16 +52,18 @@ class ScoreCardView:
             scoreBox.frame.grid(row=rw, column=0)
             rw += 1
 
-        ####To be removed only for testing assign_points method
-        self.btn_assign = tk.Button(self.mainFrame, text='Assign Roll', command=self.assign_points)
-        self.btn_assign.grid(row=rw, column=0)
+    def get_selection(self):
+        return self.assign_selection.get()
 
-    def assign_points(self):
+    def assign_points(self, box_name, points):
         for scoreBox in self.scoreBoxes:
-            if scoreBox.name == self.assign_selection.get():
-                scoreBox.update_points(3)
-                scoreBox.enabled(False)
-                self.assign_selection.set('')
+            if box_name == self.assign_selection.get():
+                scoreBox.update_points(points)
+
+    def box_enabled(self, box_name, enabled):
+        for scoreBox in self.scoreBoxes:
+            if box_name == self.assign_selection.get():
+                scoreBox.enabled(enabled)
 
 
 score = ScoreCardView(yahtzee_gui)
