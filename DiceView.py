@@ -14,7 +14,7 @@ dice = {}
 
 class DieView:
     def __init__(self, master, value):
-        self.image = PhotoImage(file="Die6.png")
+        self.image = PhotoImage(file="Die5.png")
         self.view = tk.Checkbutton(master, image=self.image)
 
     def update_value(self, value):
@@ -26,7 +26,7 @@ class DiceView:
     def __init__(self, master):
         self.dice = []
         for die_index in range(5):
-            self.dice.append(DieView(master, 6))
+            self.dice.append(DieView(master, 5))
             self.dice[die_index].view.pack()
         self.btn_roll = tk.Button(master, text="Roll Dice")
         self.btn_roll.pack()
