@@ -79,10 +79,13 @@ class Die:
 
 
 class Dice:
-    def __init__(self):
+    def __init__(self, number_of_dice=None):
         self._dice = []
         self._current_die_index = 0
         self._last_die_index = -1
+        if not number_of_dice is None:
+            for die_index in range(number_of_dice):
+                self.add_die(Die())
 
     def add_die(self, die):
         self._dice.append(die)
