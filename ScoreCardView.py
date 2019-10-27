@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import ttk as tk
 
+score_box_view_types = {'Aces', 'Twos', 'Threes', 'Fours', 'Fives', 'Sixes', '3 of a Kind', '4 of a Kind', 'Full House', 'Small Straight', 'Large Straight', 'Yahtzee', 'Chance'}
+
 
 class ScoreBoxView:
     """
@@ -13,26 +15,27 @@ class ScoreBoxView:
         enabled (bool): Whether or not the score box can be selected
     """
 
-    def __init__(self, master, label, can_assign, assignment_var):
+    def __init__(self, master, name, can_assign: bool, assignment_var: StringVar):
         """
         The constructor for ScoreBoxView
 
         Parameters:
             master (tk object): The tk master object to place the score box UI into
-            label (str): The name of the score box, also displays as a text label next to the box on the UI
+            name (str): The name of the score box, also displays as a text label next to the box on the UI. Should be one of the following values:
+            'Aces', 'Twos', 'Threes', 'Fours', 'Fives', 'Sixes', '3 of a Kind', '4 of a Kind', 'Full House', 'Small Straight', 'Large Straight', 'Yahtzee', 'Chance'
             can_assign (bool): Whether a dice roll can be assigned to the score box (For Example: the grand total score box should have False passed here)
             assignment_var (tk StringVar): The variable where the selected score box will be stored. Passed from the larger score card view object.
         """
         self._frame = tk.Frame(master)
-        self._name = label
-        self._points_view = Entry(self.frame, width=3, state='disabled')
+        self._name = name
+        self._points_view = tk.Entry(self.frame, width=3, state='disabled')
         if can_assign:
-            self._selector = tk.Radiobutton(self.frame, variable=assignment_var, text=label, width=11, value=label)
+            self._selector = tk.Radiobutton(self.frame, variable=assignment_var, text=name, width=11, value=name)
         else:
-            self._selector = tk.Label(self.frame, text=label, width=11)
+            self._selector = tk.Label(self.frame, text=name, width=13)
 
         self._selector.pack(side=LEFT, expand=True)
-        self._points_view.pack(side=LEFT, expand=True)
+        self._points_view.pack(side=RIGHT, expand=True)
 
     @property
     def points(self):
@@ -69,45 +72,94 @@ class ScoreBoxView:
         return self._name
 
 
-class SectionLabel:
-    def __init__(self, master, label):
-        self.frame = tk.Frame(master)
-        self.name = label
-        self.section_label = tk.Label(self.frame, text=label, width=14)
-        self.section_label.grid(row=0, column=0)
+# class SectionLabel:
+#     def __init__(self, master, label):
+#         self.frame = tk.Frame(master)
+#         self.name = label
+#         self.section_label = tk.Label(self.frame, text=label, width=14)
+#         self.section_label.grid(row=0, column=0)
 
 
 class ScoreCardView:
+    """
+    This is a class for an the UI of a Yahtzee score sheet
+
+    Attributes:
+        selection (str): The name of the score box that is selected
+    """
     def __init__(self, master, assign_fun):
-        boxes = ['Aces', 'Twos', 'Threes', 'Fours', 'Fives', 'Sixes', '3 of a Kind', '4 of a Kind', 'Full House', 'Small Straight', 'Large Straight', 'Yahtzee', 'Chance']
-        self.scoreBoxes = []
+        """
+        The constructor for ScoreCardView
+
+        Parameters:
+            master (tk object): The tk master object to place the score card UI into
+            assign_fun (function): The function that is called when the assign roll button is clicked on the UI
+        """
+        box_setup_instructions = {
+            'Aces': {'Can Assign': True},
+            'Twos': {'Can Assign': True},
+            'Threes': {'Can Assign': True},
+            'Fours': {'Can Assign': True},
+            'Fives': {'Can Assign': True},
+            'Sixes': {'Can Assign': True},
+            'Bonus': {'Can Assign': False},
+            'Upper Total': {'Can Assign': False},
+            '3 of a Kind': {'Can Assign': True},
+            '4 of a Kind': {'Can Assign': True},
+            'Full House': {'Can Assign': True},
+            'Small Straight': {'Can Assign': True},
+            'Large Straight': {'Can Assign': True},
+            'Yahtzee': {'Can Assign': True},
+            'Chance': {'Can Assign': True},
+            'Lower Total': {'Can Assign': False},
+            'Grand Total': {'Can Assign': False}
+        }
+
+        # Setup the main frame and variables
         self.mainFrame = tk.Frame(master)
         self.mainFrame.pack()
         self.assign_selection = StringVar()
-        for box in boxes:
-            self.scoreBoxes.append(ScoreBoxView(self.mainFrame, box, True, self.assign_selection))
+
+        # Setup the score box UIs
+        self.scoreBoxes = {}
+        for box_setup in box_setup_instructions:
+            assignable = box_setup_instructions[box_setup]['Can Assign']
+            self.scoreBoxes[box_setup] = ScoreBoxView(self.mainFrame, box_setup, assignable, self.assign_selection)
         rw = 0
         for scoreBox in self.scoreBoxes:
-            scoreBox.frame.grid(row=rw, column=0)
+            self.scoreBoxes[scoreBox].frame.grid(row=rw, column=0, sticky=NSEW)
+            #self.scoreBoxes[scoreBox].frame.pack(side=TOP, expand=True)
             rw += 1
 
-        self.btn_assign_roll = tk.Button(master, text="Assign Roll", command=assign_fun)
+        # Setup button for assigning roll
+        self.btn_assign_roll = tk.Button(master, text="Assign Roll and End Turn", command=assign_fun)
         self.btn_assign_roll.pack()
 
-    def get_selection(self):
+    @property
+    def selection(self):
+        """Get or set the selected score box on the score card.  Pass an empty string to deselect all boxes."""
         return self.assign_selection.get()
 
+    @selection.setter
+    def selection(self, box_name):
+        self.assign_selection.set(box_name)
+
     def assign_points(self, box_name, points):
-        for scoreBox in self.scoreBoxes:
-            if box_name == scoreBox.name:
-                'assign'
-                scoreBox.points = points
+        """
+        Update the number of points displayed in a score box on the score card UI
+
+        Parameters:
+            box_name (tk str): The name of the box to update the points in
+            points (bool): the number of points to place in the score box UI
+        """
+        self.scoreBoxes[box_name].points = points
 
     def box_enabled(self, box_name, enabled):
-        for scoreBox in self.scoreBoxes:
-            if box_name == scoreBox.name:
-                scoreBox.enabled = enabled
+        """
+        Update whether or not a score box on the score card UI can be selected
 
-    def deselect(self):
-        self.assign_selection.set('')
-
+        Parameters:
+            box_name (tk str): The name of the box to disable/enable
+            enabled (bool): Whether or not the box can be selected
+        """
+        self.scoreBoxes[box_name].enabled = enabled

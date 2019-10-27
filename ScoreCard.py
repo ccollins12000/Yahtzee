@@ -225,6 +225,22 @@ class ScoreCard:
         #Total Points
         self._grandTotal = self._upperTotal + self._lowerTotal
 
+    @property
+    def total_points(self):
+        return self._grandTotal
+
+    @property
+    def upper_total_points(self):
+        return self._upperTotal
+
+    @property
+    def bonus_points(self):
+        return self._bonus
+
+    @property
+    def lower_total_points(self):
+        return self._lowerTotal
+
     def get_box(self, box_name):
         for box in self._boxes:
             if box.name == box_name:

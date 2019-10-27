@@ -1,28 +1,22 @@
 import ScoreCard as SC
 import ScoreCardView as SCV
-import Die
+#import Die
+#import DiceView
 from tkinter import *
 from tkinter import ttk as tk
 
 yahtzee_gui = Tk()
 yahtzee_gui.title('Yahtzee!')
 
-
-#class ScoreBoxController:
-#    def __init__(self, view, model):
-#        self.view = view
-#        self.model = SC.Aces()
-#
-#    def assign_points(self, dice):
-#        self.model.assign_points(dice)
-#        self.view.enabled(not self.model.assigned())
-#        self.view.update_points(self.model.getpoints())
-
-
 class ScoreCardController:
     def __init__(self, tk_master):
         self.scoreCard = SC.ScoreCard()
+        #self.score_frame = tk.Frame(tk_master)
+        #self.dice_frame = tk.Frame(tk_master)
+
         self.scoreView = SCV.ScoreCardView(tk_master, self.assign_dice)
+        #self.dice = DiceView.DiceController(dice_frame)
+
         self.view_to_model = {
             'Aces': 'Aces', 'Twos': 'Twos', 'Threes': 'Threes', 'Fours': 'Fours', 'Fives': 'Fives', 'Sixes': 'Sixes',
             '3 of a Kind': '3 of a Kind', '4 of a Kind': '4 of a Kind', 'Full House': 'Full House',
@@ -40,18 +34,24 @@ class ScoreCardController:
             else:
                 self.scoreView.box_enabled(view_name, not self.scoreCard.get_box_assigned(model_name))
 
+        self.scoreView.assign_points('Bonus', self.scoreCard.bonus_points)
+        self.scoreView.assign_points('Upper Total', self.scoreCard.upper_total_points)
+        self.scoreView.assign_points('Lower Total', self.scoreCard.lower_total_points)
+        self.scoreView.assign_points('Grand Total', self.scoreCard.total_points)
+
     def assign_dice(self):
         #add parameter for dice
         dice = Die.Dice(6)
         print(dice)
-        selection = self.scoreView.get_selection()
+        selection = self.scoreView.selection
         model_translation = self.view_to_model[selection]
 
         #Assign in score card
         self.scoreCard.assign_roll(model_translation, dice)
 
         self.update_score_card()
-        self.scoreView.deselect()
+        self.scoreView.selection = ''
+
 
 score = ScoreCardController(yahtzee_gui)
 
