@@ -28,22 +28,3 @@ class DiceView:
         self.btn_roll.pack()
 
 
-class DiceController:
-    def __init__(self, tk_master):
-        self.dice = Die.Dice(5)
-        self.dice_view = DiceView(tk_master, 5, self.roll_dice)
-
-    def roll_dice(self):
-        die_index = 0
-        for die_view in self.dice_view.dice:
-            if die_view.selected.get():
-                self.dice.get_die(die_index).roll()
-                die_view.update_value(self.dice.get_die(die_index).value)
-            die_index += 1
-
-
-Yahtzee = Tk()
-dice_game = DiceController(Yahtzee)
-Yahtzee.mainloop()
-
-

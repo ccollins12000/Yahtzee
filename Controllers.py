@@ -1,21 +1,40 @@
 import ScoreCard as SC
 import ScoreCardView as SCV
-#import Die
-#import DiceView
+import Die
+import DiceView
 from tkinter import *
 from tkinter import ttk as tk
 
 yahtzee_gui = Tk()
 yahtzee_gui.title('Yahtzee!')
 
+
+class DiceController:
+    def __init__(self, tk_master):
+        self.dice = Die.Dice(5)
+        self.dice_view = DiceView.DiceView(tk_master, 5, self.roll_dice)
+
+    def roll_dice(self):
+        die_index = 0
+        for die_view in self.dice_view.dice:
+            if die_view.selected.get():
+                self.dice.get_die(die_index).roll()
+                die_view.update_value(self.dice.get_die(die_index).value)
+            die_index += 1
+
+
 class ScoreCardController:
     def __init__(self, tk_master):
         self.scoreCard = SC.ScoreCard()
-        #self.score_frame = tk.Frame(tk_master)
-        #self.dice_frame = tk.Frame(tk_master)
+        self.master_frame = tk_master
+        self.score_frame = tk.Frame(tk_master)
+        self.dice_frame = tk.Frame(tk_master)
 
-        self.scoreView = SCV.ScoreCardView(tk_master, self.assign_dice)
-        #self.dice = DiceView.DiceController(dice_frame)
+        self.scoreView = SCV.ScoreCardView(self.score_frame, self.assign_dice)
+        self.dice = DiceController(self.dice_frame)
+
+        self.score_frame.grid(row=0, column=0, sticky=NSEW)
+        self.dice_frame.grid(row=0, column=1, sticky=NSEW)
 
         self.view_to_model = {
             'Aces': 'Aces', 'Twos': 'Twos', 'Threes': 'Threes', 'Fours': 'Fours', 'Fives': 'Fives', 'Sixes': 'Sixes',
