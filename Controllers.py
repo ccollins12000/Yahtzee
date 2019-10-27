@@ -60,8 +60,7 @@ class ScoreCardController:
 
     def assign_dice(self):
         #add parameter for dice
-        dice = Die.Dice(6)
-        print(dice)
+        dice = self.dice.dice
         selection = self.scoreView.selection
         model_translation = self.view_to_model[selection]
 
