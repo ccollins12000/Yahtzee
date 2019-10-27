@@ -47,9 +47,6 @@ class Die:
     def __gt__(self, other):
         return self.value > other
 
-    def __int__(self):
-        return self.value
-
     # def __long__(self):
     #     return self.value)
 
@@ -133,51 +130,5 @@ class Dice:
         return msg
 
 
-def check_yahtzee(dice: Dice):
-    has_yahtzee = False
-    for value in range(1,7):
-        if dice.dice_roll_count(value) == 5:
-            has_yahtzee = True
-    return has_yahtzee
-
-
-def check_full_house(dice: Dice):
-    ones = dice.dice_roll_count(1)
-    twos = dice.dice_roll_count(2)
-    threes = dice.dice_roll_count(3)
-    fours = dice.dice_roll_count(4)
-    fives = dice.dice_roll_count(5)
-    sixes = dice.dice_roll_count(6)
-    if (ones == 2 or twos == 2 or threes == 2 or fours == 2 or fives == 2 or sixes == 2) and \
-            (ones == 3 or twos == 3 or threes == 3 or fours == 3 or fives == 3 or sixes == 3):
-        return True
-    else:
-        return False
-
-
-def of_a_kind_size(dice: Dice):
-    counts = [dice.dice_roll_count(1), dice.dice_roll_count(2), dice.dice_roll_count(3), dice.dice_roll_count(4), dice.dice_roll_count(5),
-              dice.dice_roll_count(6)]
-    return max(counts)
-
-
-def straight_size(dice: Dice):
-    dice.sort()
-    straight_length = 1
-    longest_straight = 1
-    for die_index in range(1, dice.die_count()):
-        current_die = dice.get_die(die_index)
-        previous_die = dice.get_die(die_index - 1)
-        if current_die == previous_die + 1:
-            straight_length += 1
-            if straight_length > longest_straight:
-                longest_straight = straight_length
-        elif current_die == previous_die:
-            straight_length = straight_length
-        else:
-            # Restart
-            straight_length = 1
-
-    return longest_straight
 
 

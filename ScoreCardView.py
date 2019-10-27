@@ -1,9 +1,6 @@
 from tkinter import *
 from tkinter import ttk as tk
 
-yahtzee_gui = Tk()
-yahtzee_gui.title('Yahtzee!')
-
 
 class ScoreBoxView:
     def __init__(self, master, label, can_assign, assignment_var):
@@ -20,6 +17,7 @@ class ScoreBoxView:
 
     def update_points(self, num_points):
         self.points.configure(state=NORMAL)
+        self.points.delete(0, END)
         self.points.insert(0, num_points)
         self.points.configure(state=DISABLED)
 
@@ -39,8 +37,8 @@ class SectionLabel:
 
 
 class ScoreCardView:
-    def __init__(self, master):
-        boxes = ['Aces', 'Twos', 'Threes', 'Fours', 'Fives', 'Sixes', '3 of a kind', '4 of a kind', 'Full House', 'Sm. Straight', 'Lg. Straight', 'YAHTZEE', 'Chance']
+    def __init__(self, master, assign_fun):
+        boxes = ['Aces', 'Twos', 'Threes', 'Fours', 'Fives', 'Sixes', '3 of a Kind', '4 of a Kind', 'Full House', 'Small Straight', 'Large Straight', 'Yahtzee', 'Chance']
         self.scoreBoxes = []
         self.mainFrame = tk.Frame(master)
         self.mainFrame.pack()
@@ -52,21 +50,23 @@ class ScoreCardView:
             scoreBox.frame.grid(row=rw, column=0)
             rw += 1
 
+        self.btn_assign_roll = tk.Button(master, text="Assign Roll", command=assign_fun)
+        self.btn_assign_roll.pack()
+
     def get_selection(self):
         return self.assign_selection.get()
 
     def assign_points(self, box_name, points):
         for scoreBox in self.scoreBoxes:
-            if box_name == self.assign_selection.get():
+            if box_name == scoreBox.name:
+                'assign'
                 scoreBox.update_points(points)
 
     def box_enabled(self, box_name, enabled):
         for scoreBox in self.scoreBoxes:
-            if box_name == self.assign_selection.get():
+            if box_name == scoreBox.name:
                 scoreBox.enabled(enabled)
 
+    def deselect(self):
+        self.assign_selection.set('')
 
-score = ScoreCardView(yahtzee_gui)
-
-
-yahtzee_gui.mainloop()
