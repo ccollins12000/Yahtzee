@@ -2,9 +2,21 @@ import random as r
 
 
 class Die:
-    def __init__(self):
-        self._value = 0
-        self.roll()
+    """
+    This is a class for a 6 sided die that can be rolled
+
+    Attributes:
+        value (int): the value of the last roll
+    """
+    def __init__(self, value=None):
+        if value is None:
+            self._value = 0
+            self.roll()
+        else:
+            if 1 <= value <= 6:
+                self._value = value
+            else:
+                raise Exception('The value of a die must be between 1 and 6')
 
     def roll(self):
         """Rolls the die"""
@@ -84,15 +96,14 @@ class Dice:
             for die_index in range(number_of_dice):
                 self.add_die(Die())
 
+
     def add_die(self, die):
         self._dice.append(die)
         self._last_die_index += 1
-        self.sort()
 
     def remove_die(self, index):
         del self._dice[index]
         self._last_die_index += -1
-        self.sort()
 
     def get_die(self, index):
         return self._dice[index]
@@ -101,13 +112,11 @@ class Dice:
         return len(self._dice)
 
     def dice_roll_count(self, value_to_count):
-        self.sort()
         return self._dice.count(value_to_count)
 
     def roll(self):
         for die in self._dice:
             die.roll()
-        self.sort()
 
     def sort(self):
         self._dice.sort()

@@ -2,6 +2,10 @@ import abc
 import Die
 
 
+#def dice_roll_count(value_to_count, dice):
+#    return dice.count(value_to_count)
+
+
 def check_yahtzee(dice):
     has_yahtzee = False
     for value in range(1,7):
@@ -31,12 +35,17 @@ def of_a_kind_size(dice):
 
 
 def straight_size(dice):
-    dice.sort()
+    values = []
+    for die in dice:
+        values.append(die.value)
+
+    values.sort()
+    values = list(set(values))
     straight_length = 1
     longest_straight = 1
-    for die_index in range(1, dice.die_count()):
-        current_die = dice.get_die(die_index)
-        previous_die = dice.get_die(die_index - 1)
+    for die_index in range(1, len(values)):
+        current_die = values[die_index]
+        previous_die = values[die_index - 1]
         if current_die == previous_die + 1:
             straight_length += 1
             if straight_length > longest_straight:
@@ -273,6 +282,3 @@ class ScoreCard:
 
     def __gt__(self, other):
         return self._grandTotal > other
-
-
-
