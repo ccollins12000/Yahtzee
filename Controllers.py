@@ -1,7 +1,6 @@
 import ScoreCard as SC
-import ScoreCardView as SCV
+import YahtzeeViews
 import Die
-import DiceView
 from tkinter import *
 from tkinter import ttk as tk
 
@@ -12,7 +11,7 @@ yahtzee_gui.title('Yahtzee!')
 class DiceController:
     def __init__(self, tk_master):
         self.dice = Die.Dice(5)
-        self.dice_view = DiceView.DiceView(tk_master, 5, 2, self.roll_dice)
+        self.dice_view = YahtzeeViews.DiceView(tk_master, 5, 2, self.roll_dice)
         self.update_dice()
 
     def update_dice(self):
@@ -40,7 +39,7 @@ class ScoreCardController:
         self.score_frame = tk.Frame(tk_master)
         self.dice_frame = tk.Frame(tk_master)
 
-        self.scoreView = SCV.ScoreCardView(self.score_frame, self.assign_dice)
+        self.scoreView = YahtzeeViews.ScoreCardView(self.score_frame)
         self.dice = DiceController(self.dice_frame)
 
         self.score_frame.grid(row=0, column=0, sticky=NSEW)
@@ -52,6 +51,10 @@ class ScoreCardController:
             'Small Straight': 'Small Straight', 'Large Straight': 'Large Straight', 'Yahtzee': 'Yahtzee',
             'Chance': 'Chance'
         }
+        self.btn_assign_roll = tk.Button(tk_master, text="Assign Roll", command=self.assign_dice)
+        self.btn_assign_roll.grid(row=1, column=0)
+        self.btn_end_turn = tk.Button(tk_master, text="End Turn")
+        self.btn_end_turn.grid(row=2, column=0)
 
     def update_score_card(self):
         for box in self.view_to_model:

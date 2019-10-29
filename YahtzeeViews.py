@@ -1,5 +1,59 @@
 from tkinter import *
 from tkinter import ttk as tk
+import Die
+from tkinter import *
+from tkinter import ttk as tk
+
+
+class DieView:
+    def __init__(self, master, value=None):
+        if value is None:
+            value = 6
+        self.image = PhotoImage(file="Die" + str(value) + ".png")
+        self.selected = IntVar()
+        self.view = tk.Checkbutton(master, image=self.image, variable=self.selected)
+
+    def update_value(self, value):
+        self.image = PhotoImage(file="Die" + str(value) + ".png")
+        self.view.configure(image=self.image)
+
+
+class DiceView:
+    def __init__(self, master, number_of_dice, initial_rolls, roll_fun):
+        self.dice = []
+        self._can_roll = True
+        self._rolls_remaining = initial_rolls
+        for die_index in range(number_of_dice):
+            self.dice.append(DieView(master))
+            self.dice[-1].view.pack()
+        self._rollsRemainingTxt = StringVar()
+        self._rollsRemainingTxt.set('Rolls Remaining: ' + str(initial_rolls))
+        self._txt_rolls_remaining = tk.Label(master, textvariable=self._rollsRemainingTxt)
+        self._txt_rolls_remaining.pack()
+        self.btn_roll = tk.Button(master, text="Roll Dice", command=roll_fun)
+        self.btn_roll.pack()
+
+    @property
+    def rolls_remaining(self):
+        return self._rolls_remaining
+
+    @rolls_remaining.setter
+    def rolls_remaining(self, value):
+        self._rolls_remaining = value
+        self._rollsRemainingTxt.set('Rolls Remaining: ' + str(self._rolls_remaining))
+
+    @property
+    def can_roll(self):
+        return self._can_roll
+
+    @can_roll.setter
+    def can_roll(self, enabled):
+        self._can_roll = enabled
+        if enabled:
+            self.btn_roll.config(state=NORMAL)
+        else:
+            self.btn_roll.config(state=DISABLED)
+
 
 score_box_view_types = {'Aces', 'Twos', 'Threes', 'Fours', 'Fives', 'Sixes', '3 of a Kind', '4 of a Kind', 'Full House', 'Small Straight', 'Large Straight', 'Yahtzee', 'Chance'}
 
@@ -72,14 +126,6 @@ class ScoreBoxView:
         return self._name
 
 
-# class SectionLabel:
-#     def __init__(self, master, label):
-#         self.frame = tk.Frame(master)
-#         self.name = label
-#         self.section_label = tk.Label(self.frame, text=label, width=14)
-#         self.section_label.grid(row=0, column=0)
-
-
 class ScoreCardView:
     """
     This is a class for an the UI of a Yahtzee score sheet
@@ -87,7 +133,7 @@ class ScoreCardView:
     Attributes:
         selection (str): The name of the score box that is selected
     """
-    def __init__(self, master, assign_fun):
+    def __init__(self, master):
         """
         The constructor for ScoreCardView
 
@@ -132,8 +178,6 @@ class ScoreCardView:
             rw += 1
 
         # Setup button for assigning roll
-        self.btn_assign_roll = tk.Button(master, text="Assign Roll and End Turn", command=assign_fun)
-        self.btn_assign_roll.pack()
 
     @property
     def selection(self):
