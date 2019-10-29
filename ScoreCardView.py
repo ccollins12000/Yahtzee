@@ -163,3 +163,4 @@ class ScoreCardView:
             enabled (bool): Whether or not the box can be selected
         """
         self.scoreBoxes[box_name].enabled = enabled
+

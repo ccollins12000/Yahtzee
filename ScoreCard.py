@@ -58,6 +58,7 @@ def straight_size(dice):
 
     return longest_straight
 
+# Functions for score boxes
 
 def aces_points(dice):
     return dice.dice_roll_count(1) * 1
