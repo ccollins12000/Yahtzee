@@ -17,7 +17,7 @@ class DiceController:
     def update_dice(self):
         die_index = 0
         for die in self.dice:
-            self.dice_view.dice[die_index].update_value(die.value)
+            self.dice_view.dice[die_index].last_roll =  die.value
             die_index += 1
 
     def roll_dice(self):

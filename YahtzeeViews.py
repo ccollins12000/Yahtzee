@@ -6,16 +6,44 @@ from tkinter import ttk as tk
 
 
 class DieView:
-    def __init__(self, master, value=None):
-        if value is None:
-            value = 6
-        self.image = PhotoImage(file="Die" + str(value) + ".png")
-        self.selected = IntVar()
-        self.view = tk.Checkbutton(master, image=self.image, variable=self.selected)
+    """
+    This is a class to display a single die that can be selected
 
-    def update_value(self, value):
-        self.image = PhotoImage(file="Die" + str(value) + ".png")
-        self.view.configure(image=self.image)
+    Attributes:
+        selected (bool): Whether or not the die is selected
+        last_roll (int): The number diplayed on the die
+
+    """
+    def __init__(self, master, initial_roll=None):
+        self._last_roll = 6
+        if initial_roll is None:
+            self._last_roll = 6
+        self._image = PhotoImage(file="Die" + str(self._last_roll) + ".png")
+        self._selected = IntVar()
+        self.view = tk.Checkbutton(master, image=self._image, variable=self.selected)
+
+    @property
+    def selected(self):
+        """Get or set whether the die is selected. Toggles the checkbox control"""
+        return self._selected
+
+    @selected.setter
+    def selected(self, is_selected):
+        self._selected.set(is_selected)
+
+    @property
+    def last_roll(self):
+        """Get or set the number displayed on the die"""
+        return self._last_roll
+
+    @last_roll.setter
+    def last_roll(self, value):
+        if 1 <= value <= 6:
+            self._last_roll = value
+            self._image = PhotoImage(file="Die" + str(value) + ".png")
+            self.view.configure(image=self._image)
+        else:
+            raise Exception('Value of die view must be between 1 and 6')
 
 
 class DiceView:
@@ -207,4 +235,3 @@ class ScoreCardView:
             enabled (bool): Whether or not the box can be selected
         """
         self.scoreBoxes[box_name].enabled = enabled
-
