@@ -90,6 +90,7 @@ class Die:
 def dice_roll_count(dice_list, value_to_count):
     return dice_list.count(value_to_count)
 
+
 def check_yahtzee(dice_list):
     has_yahtzee = False
     for value in range(1,7):
@@ -113,8 +114,9 @@ def check_full_house(dice_list):
 
 
 def of_a_kind_size(dice_list):
-    counts = [dice_roll_count(1, dice_list), dice_roll_count(2, dice_list), dice_roll_count(3, dice_list), dice_roll_count(4, dice_list), dice_roll_count(5, dice_list),
-              dice_roll_count(6, dice_list)]
+    counts = [dice_roll_count(dice_list, 1), dice_roll_count(dice_list, 2), dice_roll_count(dice_list, 3),
+              dice_roll_count(dice_list, 4), dice_roll_count(dice_list, 5),
+              dice_roll_count(dice_list, 6)]
     return max(counts)
 
 
