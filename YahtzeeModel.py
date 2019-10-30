@@ -113,7 +113,7 @@ def check_full_house(dice_list):
 
 
 def of_a_kind_size(dice_list):
-    counts = [dice_roll_count(1, dice_list), dice_roll_count(2, dice_list), dice_roll_count(3, dice_list), dice_roll_count(4, dice_list), dice_roll_count(5), dice_list,
+    counts = [dice_roll_count(1, dice_list), dice_roll_count(2, dice_list), dice_roll_count(3, dice_list), dice_roll_count(4, dice_list), dice_roll_count(5, dice_list),
               dice_roll_count(6, dice_list)]
     return max(counts)
 
@@ -348,10 +348,32 @@ class ScoreCard:
         self.update_points()
 
     def get_box_points(self, box_name):
-        return self.get_box(box_name).points
+        box = self.get_box(box_name)
+        if box is None:
+            if box_name == 'Upper Total':
+                return self._upperTotal
+            elif box_name == 'Bonus':
+                return self._bonus
+            elif box_name == 'Lower Total':
+                return self._lowerTotal
+            elif box_name == 'Grand Total':
+                return self._grandTotal
+        else:
+            return box.points
 
     def get_box_assigned(self, box_name):
-        return self.get_box(box_name).assigned
+        box = self.get_box(box_name)
+        if box is None:
+            if box_name == 'Upper Total':
+                return True
+            elif box_name == 'Bonus':
+                return True
+            elif box_name == 'Lower Total':
+                return True
+            elif box_name == 'Grand Total':
+                return True
+        else:
+            return box.assigned
 
     def __lt__(self, other):
         return self._grandTotal < other
