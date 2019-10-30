@@ -256,14 +256,8 @@ class ScoreBox:
     def points(self):
         return self._points
 
-    def getpoints(self):
-        return self._points
-
     @property
     def assigned(self):
-        return self._assigned
-
-    def getassigned(self):
         return self._assigned
 
     def assign_points(self, dice):
