@@ -297,7 +297,9 @@ class ScoreCard:
         self._grandTotal = 0
         self._upper_section = [self._aces, self._twos, self._threes, self._fours, self._fives, self._sixes]
         self._lower_section = [self._threeOfAKind, self._fourOfAKind, self._fullHouse, self._smallStraight, self._largeStraight, self._yahtzee, self._chance]
-        self._boxes = [self._aces, self._twos, self._threes, self._fours, self._fives, self._sixes, self._threeOfAKind, self._fourOfAKind, self._fullHouse, self._smallStraight, self._largeStraight, self._yahtzee, self._chance]
+        self._boxes = [self._aces, self._twos, self._threes, self._fours, self._fives, self._sixes, self._threeOfAKind,
+                       self._fourOfAKind, self._fullHouse, self._smallStraight, self._largeStraight, self._yahtzee, self._chance
+                       ]
 
     def print_points(self, box_index):
         return str(self._boxes[box_index])
@@ -381,10 +383,14 @@ class YahtzeeModel:
         self._rolls_remaining = 3
         self._dice = []
         self._score_card = ScoreCard()
-        self._selected_dice = [False for selected_index in range(5)]
+        self._selected_dice = [True for selected_index in range(5)]
         self._assigned_roll = False
         for die_index in range(5):
             self._dice.append(Die())
+
+    @property
+    def score_card(self):
+        return self._score_card
 
     @property
     def rolls_remaining(self):
@@ -396,16 +402,21 @@ class YahtzeeModel:
         """Return the number of turns remaining in the game"""
         return self._turn
 
-    def roll_dice(self):
-        """Roll the dice that have been selected"""
-        if self._rolls_remaining > 0:
-            for die in self._dice:
-                die.roll()
-        self._rolls_remaining = self._rolls_remaining - 1
+    def get_dice(self):
         return [die.value for die in self._dice]
 
+    def roll_dice(self):
+        """Roll the dice that have been selected"""
+        if self._rolls_remaining > 0 and self._assigned_roll == False:
+            for die_index, die in enumerate(self._dice):
+                if self._selected_dice[die_index]:
+                    die.roll()
+        self._rolls_remaining = self._rolls_remaining - 1
+        return self.get_dice()
+
     def assign_roll(self, box_name):
-        if self._assigned_roll:
+        # only assign roll if the box doesn't already have value and the roll hasn't already been assigned this turn
+        if self._assigned_roll or self._score_card.get_box_assigned(box_name):
             return self._score_card.get_box_points(box_name)
         else:
             self._score_card.assign_roll(box_name, self._dice)
@@ -417,7 +428,9 @@ class YahtzeeModel:
         if self._turn > 0:
             self._turn -= 1
             self._rolls_remaining = 3
+            self._selected_dice = [True for selected_index in range(5)]
             self._assigned_roll = False
+            self.roll_dice()
         else:
             self.end_game()
 

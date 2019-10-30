@@ -48,6 +48,14 @@ class YahtzeeView:
     def die_selected(self, die_index):
         return self._dice[die_index].selected
 
+    def update_box(self, box_name, points, enabled):
+        self._score_card.assign_points(box_name, points)
+        self._score_card.box_enabled(box_name, enabled)
+
+    @property
+    def selected_box(self):
+        return self._score_card.selection
+
     @property
     def rolls_remaining(self):
         return self._rolls_remaining
