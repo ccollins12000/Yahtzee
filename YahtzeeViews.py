@@ -9,7 +9,7 @@ def empty_function():
 class YahtzeeView:
     def __init__(self, master, roll_function, assign_function, end_turn_function):
         self._game_logo_frame = tk.Button(master, text='Yahtzee')
-        self._game_logo_frame.grid(row=0, column=0, sticky=N + S + E + W)
+        self._game_logo_frame.grid(row=0, column=0, rowspan = 2, sticky=N + S + E + W)
 
         #Dice views
         self._dice_frame = tk.Frame(master)
@@ -21,25 +21,28 @@ class YahtzeeView:
             self._dice[-1].view.grid(row=0, column =die_col)
             die_col += 1
 
-        self.btn_roll = tk.Button(master, text="Roll Dice", command=roll_function)
-        self._dice_frame.grid(row=0, column=1, sticky=NSEW)
+        self.btn_roll = tk.Button(master, text='Roll Dice', command=roll_function)
+        self._dice_frame.grid(row=0, column=1, rowspan=2, sticky=NSEW)
         self.btn_roll.grid(row=0, column=2, sticky=N + S + E + W)
+
+        self._rollsRemainingTxt = StringVar()
+        self._rolls_remaining = 0
+        self._rollsRemainingTxt.set('Rolls Remaining: ' + str(self._rolls_remaining))
+        self._lbl_rolls_remaining = tk.Label(master, textvariable = self._rollsRemainingTxt)
+        self._lbl_rolls_remaining.grid(row=1, column=2, sticky=N + S + E + W)
 
         #Score Card
         self._score_card_frame = tk.Frame(master)
         self._score_card = ScoreCardView(self._score_card_frame)
-        self._score_card_frame.grid(row=1, column=0, sticky=W)
+        self._score_card_frame.grid(row=2, column=0, sticky=W)
         self.btn_assign_roll = tk.Button(master, text="Assign Roll", command=assign_function)
-        self.btn_assign_roll.grid(row=2, column=0, sticky=N + S + E + W)
+        self.btn_assign_roll.grid(row=3, column=0, sticky=N + S + E + W)
         self.btn_end_turn = tk.Button(master, text="End Turn", command=end_turn_function)
-        self.btn_end_turn.grid(row=3, column=0, sticky=N + S + E + W)
+        self.btn_end_turn.grid(row=4, column=0, sticky=N + S + E + W)
 
         #Game stats/control properties
         self._game_stats_frame = tk.Frame(master)
-        self._game_stats_frame.grid(row=1, column=1, rowspan=2, columnspan=2)
-        self._rollsRemainingTxt = StringVar()
-        self._rolls_remaining = 0
-        self._rollsRemainingTxt.set('Rolls Remaining: ' + str(self._rolls_remaining))
+        self._game_stats_frame.grid(row=2, column=1, rowspan=2, columnspan=2)
         self._can_roll = True
 
     def update_die(self, die_index, value):

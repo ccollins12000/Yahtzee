@@ -18,6 +18,7 @@ class Yahtzee:
             'Small Straight': 'Small Straight', 'Large Straight': 'Large Straight', 'Yahtzee': 'Yahtzee',
             'Chance': 'Chance'
         }
+        self._view.rolls_remaining = self._model.rolls_remaining
 
     def update_dice_select(self):
         for die_index in range(5):
@@ -56,6 +57,7 @@ class Yahtzee:
         self.update_dice_select()
         self._model.roll_dice()
         self.update_dice()
+        self._view.rolls_remaining = self._model.rolls_remaining
 
     def assign_roll(self):
         box_name = self.view_to_model[self._view.selected_box]

@@ -238,7 +238,8 @@ assign_function_lookup = {
 
 
 class ScoreBox:
-
+    """
+    """
     def __init__(self, box_type):
         self._points = 0
         self._assigned = False
@@ -405,7 +406,7 @@ class YahtzeeModel:
             for die_index, die in enumerate(self._dice):
                 if self._selected_dice[die_index]:
                     die.roll()
-        self._rolls_remaining = self._rolls_remaining - 1
+            self._rolls_remaining = self._rolls_remaining - 1
         return self.get_dice()
 
     def assign_roll(self, box_name):
