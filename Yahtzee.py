@@ -1,5 +1,4 @@
 from tkinter import *
-from tkinter import ttk as tk
 import YahtzeeViews
 import YahtzeeModel
 
@@ -10,7 +9,7 @@ def empty_function():
 
 class Yahtzee:
     def __init__(self, tk_master):
-        self._view = YahtzeeViews.YahtzeeView(tk_master, self.roll_dice ,self.assign_roll ,self.next_turn)
+        self._view = YahtzeeViews.YahtzeeView(tk_master, self.roll_dice, self.assign_roll ,self.next_turn)
         self._model = YahtzeeModel.YahtzeeModel()
         self.roll_dice()
         self.view_to_model = {
