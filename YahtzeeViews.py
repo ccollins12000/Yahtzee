@@ -255,6 +255,6 @@ class ScoreCardView:
         self.scoreBoxes[box_name].enabled = enabled
 
 
-#score = GameBoardView(yahtzee_gui, empty_function, empty_function, empty_function)
+score = GameBoardView(yahtzee_gui, empty_function, empty_function, empty_function)
 
-#yahtzee_gui.mainloop()
+yahtzee_gui.mainloop()
