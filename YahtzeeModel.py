@@ -425,14 +425,15 @@ class YahtzeeModel:
 
     def next_turn(self):
         """Proceed to next turn"""
-        if self._turn > 0:
-            self._turn -= 1
-            self._rolls_remaining = 3
-            self._selected_dice = [True for selected_index in range(5)]
-            self._assigned_roll = False
-            self.roll_dice()
-        else:
-            self.end_game()
+        if self._assigned_roll == True:
+            if self._turn > 0:
+                self._turn -= 1
+                self._rolls_remaining = 3
+                self._selected_dice = [True for selected_index in range(5)]
+                self._assigned_roll = False
+                self.roll_dice()
+            else:
+                self.end_game()
 
     def end_game(self):
         """End the game and calculate winner"""
