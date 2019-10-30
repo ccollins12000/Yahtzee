@@ -1,8 +1,74 @@
 from tkinter import *
 from tkinter import ttk as tk
-import Die
-from tkinter import *
-from tkinter import ttk as tk
+
+yahtzee_gui = Tk()
+
+def empty_function():
+    pass
+
+
+class GameBoardView:
+    def __init__(self, master, roll_function, assign_function, end_turn_function):
+        self._game_logo_frame = tk.Button(master, text='Yahtzee')
+        self._game_logo_frame.grid(row=0, column=0, sticky=N + S + E + W)
+
+        #Dice views
+        self._dice_frame = tk.Frame(master)
+
+        self._dice = []
+        die_col = 0
+        for die_index in range(5):
+            self._dice.append(DieView(self._dice_frame, 6))
+            self._dice[-1].view.grid(row=0, column =die_col)
+            die_col += 1
+
+        self.btn_roll = tk.Button(master, text="Roll Dice", command=roll_function)
+        self._dice_frame.grid(row=0, column=1, sticky=NSEW)
+        self.btn_roll.grid(row=0, column=2, sticky=N + S + E + W)
+
+        #Score Card
+        self._score_card_frame = tk.Frame(master)
+        self._score_card = ScoreCardView(self._score_card_frame)
+        self._score_card_frame.grid(row=1, column=0, sticky=W)
+        self.btn_assign_roll = tk.Button(master, text="Assign Roll", command=assign_function)
+        self.btn_assign_roll.grid(row=2, column=0, sticky=N + S + E + W)
+        self.btn_end_turn = tk.Button(master, text="End Turn", command=end_turn_function)
+        self.btn_end_turn.grid(row=3, column=0, sticky=N + S + E + W)
+
+        #Game stats/control properties
+        self._game_stats_frame = tk.Frame(master)
+        self._game_stats_frame.grid(row=1, column=1, rowspan=2, columnspan=2)
+        self._rollsRemainingTxt = StringVar()
+        self._rolls_remaining = 0
+        self._rollsRemainingTxt.set('Rolls Remaining: ' + str(self._rolls_remaining))
+        self._can_roll = True
+
+    def update_die(self, die_index, value):
+        self._dice[die_index].last_roll = value
+
+    def die_selected(self, die_index):
+        return self._dice[die_index].selected
+
+    @property
+    def rolls_remaining(self):
+        return self._rolls_remaining
+
+    @rolls_remaining.setter
+    def rolls_remaining(self, value):
+        self._rolls_remaining = value
+        self._rollsRemainingTxt.set('Rolls Remaining: ' + str(self._rolls_remaining))
+
+    @property
+    def can_roll(self):
+        return self._can_roll
+
+    @can_roll.setter
+    def can_roll(self, enabled):
+        self._can_roll = enabled
+        if enabled:
+            self.btn_roll.config(state=NORMAL)
+        else:
+            self.btn_roll.config(state=DISABLED)
 
 
 class DieView:
@@ -46,43 +112,6 @@ class DieView:
             raise Exception('Value of die view must be between 1 and 6')
 
 
-class DiceView:
-    def __init__(self, master, number_of_dice, initial_rolls, roll_fun):
-        self.dice = []
-        self._can_roll = True
-        self._rolls_remaining = initial_rolls
-        for die_index in range(number_of_dice):
-            self.dice.append(DieView(master))
-            self.dice[-1].view.pack()
-        self._rollsRemainingTxt = StringVar()
-        self._rollsRemainingTxt.set('Rolls Remaining: ' + str(initial_rolls))
-        self._txt_rolls_remaining = tk.Label(master, textvariable=self._rollsRemainingTxt)
-        self._txt_rolls_remaining.pack()
-        self.btn_roll = tk.Button(master, text="Roll Dice", command=roll_fun)
-        self.btn_roll.pack()
-
-    @property
-    def rolls_remaining(self):
-        return self._rolls_remaining
-
-    @rolls_remaining.setter
-    def rolls_remaining(self, value):
-        self._rolls_remaining = value
-        self._rollsRemainingTxt.set('Rolls Remaining: ' + str(self._rolls_remaining))
-
-    @property
-    def can_roll(self):
-        return self._can_roll
-
-    @can_roll.setter
-    def can_roll(self, enabled):
-        self._can_roll = enabled
-        if enabled:
-            self.btn_roll.config(state=NORMAL)
-        else:
-            self.btn_roll.config(state=DISABLED)
-
-
 score_box_view_types = {'Aces', 'Twos', 'Threes', 'Fours', 'Fives', 'Sixes', '3 of a Kind', '4 of a Kind', 'Full House', 'Small Straight', 'Large Straight', 'Yahtzee', 'Chance'}
 
 
@@ -108,45 +137,36 @@ class ScoreBoxView:
             can_assign (bool): Whether a dice roll can be assigned to the score box (For Example: the grand total score box should have False passed here)
             assignment_var (tk StringVar): The variable where the selected score box will be stored. Passed from the larger score card view object.
         """
-        self._frame = tk.Frame(master)
         self._name = name
-        self._points_view = tk.Entry(self.frame, width=3, state='disabled')
+        self.points_view = tk.Entry(master, width=3, state='disabled')
         if can_assign:
-            self._selector = tk.Radiobutton(self.frame, variable=assignment_var, text=name, width=11, value=name)
+            self.selector = tk.Radiobutton(master, variable=assignment_var, text=name, width=11, value=name)
         else:
-            self._selector = tk.Label(self.frame, text=name, width=13)
-
-        self._selector.pack(side=LEFT, expand=True)
-        self._points_view.pack(side=RIGHT, expand=True)
+            self.selector = tk.Label(master, text=name, width=13)
 
     @property
     def points(self):
         """Get or set the points displayed in the score box"""
-        return self._points_view.get()
+        return self.points_view.get()
 
     @points.setter
     def points(self, value):
-        self._points_view.configure(state=NORMAL)
-        self._points_view.delete(0, END)
-        self._points_view.insert(0, value)
-        self._points_view.configure(state=DISABLED)
+        self.points_view.configure(state=NORMAL)
+        self.points_view.delete(0, END)
+        self.points_view.insert(0, value)
+        self.points_view.configure(state=DISABLED)
 
     @property
     def enabled(self):
         """Enabled or disable the score box from being able to be selected for assigning a dice roll"""
-        return self._selector.state()
+        return self.selector.state()
 
     @enabled.setter
     def enabled(self, enable):
         if enable:
-            self._selector.configure(state=NORMAL)
+            self.selector.configure(state=NORMAL)
         else:
-            self._selector.configure(state=DISABLED)
-
-    @property
-    def frame(self):
-        """Get the tk frame containing all the score box UI elements"""
-        return self._frame
+            self.selector.configure(state=DISABLED)
 
     @property
     def name(self):
@@ -167,26 +187,25 @@ class ScoreCardView:
 
         Parameters:
             master (tk object): The tk master object to place the score card UI into
-            assign_fun (function): The function that is called when the assign roll button is clicked on the UI
         """
         box_setup_instructions = {
-            'Aces': {'Can Assign': True},
-            'Twos': {'Can Assign': True},
-            'Threes': {'Can Assign': True},
-            'Fours': {'Can Assign': True},
-            'Fives': {'Can Assign': True},
-            'Sixes': {'Can Assign': True},
-            'Bonus': {'Can Assign': False},
-            'Upper Total': {'Can Assign': False},
-            '3 of a Kind': {'Can Assign': True},
-            '4 of a Kind': {'Can Assign': True},
-            'Full House': {'Can Assign': True},
-            'Small Straight': {'Can Assign': True},
-            'Large Straight': {'Can Assign': True},
-            'Yahtzee': {'Can Assign': True},
-            'Chance': {'Can Assign': True},
-            'Lower Total': {'Can Assign': False},
-            'Grand Total': {'Can Assign': False}
+            'Aces': {'Can Assign': True, 'Section': 'Upper'},
+            'Twos': {'Can Assign': True, 'Section': 'Upper'},
+            'Threes': {'Can Assign': True, 'Section': 'Upper'},
+            'Fours': {'Can Assign': True, 'Section': 'Upper'},
+            'Fives': {'Can Assign': True, 'Section': 'Upper'},
+            'Sixes': {'Can Assign': True, 'Section': 'Upper'},
+            'Bonus': {'Can Assign': False, 'Section': 'Upper'},
+            'Upper Total': {'Can Assign': False, 'Section': 'Upper'},
+            '3 of a Kind': {'Can Assign': True, 'Section': 'Lower'},
+            '4 of a Kind': {'Can Assign': True, 'Section': 'Lower'},
+            'Full House': {'Can Assign': True, 'Section': 'Lower'},
+            'Small Straight': {'Can Assign': True, 'Section': 'Lower'},
+            'Large Straight': {'Can Assign': True, 'Section': 'Lower'},
+            'Yahtzee': {'Can Assign': True, 'Section': 'Lower'},
+            'Chance': {'Can Assign': True, 'Section': 'Lower'},
+            'Lower Total': {'Can Assign': False, 'Section': 'Lower'},
+            'Grand Total': {'Can Assign': False, 'Section': 'Lower'}
         }
 
         # Setup the main frame and variables
@@ -194,15 +213,14 @@ class ScoreCardView:
         self.mainFrame.pack()
         self.assign_selection = StringVar()
 
-        # Setup the score box UIs
         self.scoreBoxes = {}
         for box_setup in box_setup_instructions:
             assignable = box_setup_instructions[box_setup]['Can Assign']
             self.scoreBoxes[box_setup] = ScoreBoxView(self.mainFrame, box_setup, assignable, self.assign_selection)
         rw = 0
         for scoreBox in self.scoreBoxes:
-            self.scoreBoxes[scoreBox].frame.grid(row=rw, column=0, sticky=NSEW)
-            #self.scoreBoxes[scoreBox].frame.pack(side=TOP, expand=True)
+            self.scoreBoxes[scoreBox].points_view.grid(row=rw, column=1, sticky=NSEW)
+            self.scoreBoxes[scoreBox].selector.grid(row=rw, column=0, sticky=NSEW)
             rw += 1
 
         # Setup button for assigning roll
@@ -235,3 +253,8 @@ class ScoreCardView:
             enabled (bool): Whether or not the box can be selected
         """
         self.scoreBoxes[box_name].enabled = enabled
+
+
+#score = GameBoardView(yahtzee_gui, empty_function, empty_function, empty_function)
+
+#yahtzee_gui.mainloop()
