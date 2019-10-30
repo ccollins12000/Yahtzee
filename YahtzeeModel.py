@@ -1,5 +1,6 @@
 import random as r
 
+
 class Die:
     """
     This is a class for a 6 sided die that can be rolled
@@ -374,7 +375,7 @@ class ScoreCard:
         return self._grandTotal > other
 
 
-class Game:
+class YahtzeeModel:
     def __init__(self):
         self._turn = 13
         self._rolls_remaining = 3
@@ -383,7 +384,7 @@ class Game:
         self._selected_dice = [False for selected_index in range(5)]
         self._assigned_roll = False
         for die_index in range(5):
-            self._dice.append(Die)
+            self._dice.append(Die())
 
     @property
     def rolls_remaining(self):
@@ -400,7 +401,7 @@ class Game:
         if self._rolls_remaining > 0:
             for die in self._dice:
                 die.roll()
-                self._rolls_remaining -= 1
+        self._rolls_remaining = self._rolls_remaining - 1
         return [die.value for die in self._dice]
 
     def assign_roll(self, box_name):
@@ -427,5 +428,5 @@ class Game:
     def toggle_die_for_roll(self, die_index, selected):
         """Select or un-select dice to be rolled"""
         self._selected_dice[die_index] = selected
-        return [self._selected_dice[selected_index] for selected_index in self._selected_dice]
+        # return [self._selected_dice[selected_index] for selected_index in self._selected_dice]
 

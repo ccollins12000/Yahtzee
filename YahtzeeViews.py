@@ -1,13 +1,12 @@
 from tkinter import *
 from tkinter import ttk as tk
 
-yahtzee_gui = Tk()
 
 def empty_function():
     pass
 
 
-class GameBoardView:
+class YahtzeeView:
     def __init__(self, master, roll_function, assign_function, end_turn_function):
         self._game_logo_frame = tk.Button(master, text='Yahtzee')
         self._game_logo_frame.grid(row=0, column=0, sticky=N + S + E + W)
@@ -85,13 +84,13 @@ class DieView:
         if initial_roll is None:
             self._last_roll = 6
         self._image = PhotoImage(file="Die" + str(self._last_roll) + ".png")
-        self._selected = IntVar()
-        self.view = tk.Checkbutton(master, image=self._image, variable=self.selected)
+        self._selected = IntVar(value=1)
+        self.view = tk.Checkbutton(master, image=self._image, variable=self._selected)
 
     @property
     def selected(self):
         """Get or set whether the die is selected. Toggles the checkbox control"""
-        return self._selected
+        return self._selected.get()
 
     @selected.setter
     def selected(self, is_selected):
@@ -253,8 +252,3 @@ class ScoreCardView:
             enabled (bool): Whether or not the box can be selected
         """
         self.scoreBoxes[box_name].enabled = enabled
-
-
-score = GameBoardView(yahtzee_gui, empty_function, empty_function, empty_function)
-
-yahtzee_gui.mainloop()
