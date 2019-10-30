@@ -1,6 +1,5 @@
 import random as r
 
-
 class Die:
     """
     This is a class for a 6 sided die that can be rolled
@@ -386,26 +385,34 @@ class Game:
         for die_index in range(5):
             self._dice.append(Die)
 
+    @property
+    def rolls_remaining(self):
+        """Get the number of rolls remaining for the current turn"""
+        return self._rolls_remaining
 
+    @property
+    def turn(self):
+        """Return the number of turns remaining in the game"""
+        return self._turn
 
     def roll_dice(self):
+        """Roll the dice that have been selected"""
         if self._rolls_remaining > 0:
             for die in self._dice:
                 die.roll()
                 self._rolls_remaining -= 1
-            return 'Dice Rolled'
-        else:
-            return 'No more rolls remaining!'
+        return [die.value for die in self._dice]
 
     def assign_roll(self, box_name):
         if self._assigned_roll:
-            return 'Already assigned this roll!'
+            return self._score_card.get_box_points(box_name)
         else:
             self._score_card.assign_roll(box_name, self._dice)
             self._assigned_roll = True
-            return 'Roll assigned!'
+            return self._score_card.get_box_points(box_name)
 
     def next_turn(self):
+        """Proceed to next turn"""
         if self._turn > 0:
             self._turn -= 1
             self._rolls_remaining = 3
@@ -414,8 +421,11 @@ class Game:
             self.end_game()
 
     def end_game(self):
+        """End the game and calculate winner"""
         pass
 
     def toggle_die_for_roll(self, die_index, selected):
+        """Select or un-select dice to be rolled"""
         self._selected_dice[die_index] = selected
+        return [self._selected_dice[selected_index] for selected_index in self._selected_dice]
 
