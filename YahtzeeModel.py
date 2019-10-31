@@ -29,9 +29,6 @@ class Die:
     def value(self):
         return self._value
 
-    def getvalue(self):
-        return self._value
-
     def __add__(self, other):
         return self.value + other
 
@@ -92,20 +89,13 @@ def dice_roll_count(dice_list, value_to_count):
 
 
 def check_yahtzee(dice_list):
-    has_yahtzee = False
-    for value in range(1,7):
-        if dice_roll_count(dice_list, value) == 5:
-            has_yahtzee = True
-    return has_yahtzee
+    roll_counts = [dice_list.count(value) for value in range(1, 7)]
+    return 5 in roll_counts
 
 
 def check_full_house(dice_list):
     roll_counts = [dice_list.count(value) for value in range(1, 7)]
-
-    if 2 in roll_counts and 3 in roll_counts:
-        return True
-    else:
-        return False
+    return 2 in roll_counts and 3 in roll_counts
 
 
 def of_a_kind_size(dice_list):
@@ -171,10 +161,7 @@ def three_of_a_kind_points(dice_list):
 
 def four_of_a_kind_points(dice_list):
     if of_a_kind_size(dice_list) >= 4:
-        total = 0
-        for die in dice_list:
-            total += die.value
-        return total
+        return sum(dice_list)
     else:
         return 0
 
@@ -208,10 +195,7 @@ def yahtzee_points(dice_list):
 
 
 def chance_points(dice_list):
-    total = 0
-    for die in dice_list:
-        total += die.value
-    return total
+    return sum(dice_list)
 
 
 assign_function_lookup = {
