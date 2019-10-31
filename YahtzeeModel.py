@@ -104,7 +104,7 @@ def of_a_kind_size(dice_list):
 
 def straight_size(dice_list):
     # generates list of count dice values 1-6 in order.  Any count of 0 breaks the straight
-    roll_counts = [str(dice_list.count(value)) for value in range(1,7)]
+    roll_counts = [str(dice_list.count(value)) for value in range(1, 7)]
     return len(max(''.join(roll_counts).split('0'), key=len))
 
 # Functions for score boxes
