@@ -100,24 +100,16 @@ def check_yahtzee(dice_list):
 
 
 def check_full_house(dice_list):
-    ones = dice_roll_count(dice_list, 1)
-    twos = dice_roll_count(dice_list, 2)
-    threes = dice_roll_count(dice_list, 3)
-    fours = dice_roll_count(dice_list, 4)
-    fives = dice_roll_count(dice_list, 5)
-    sixes = dice_roll_count(dice_list, 6)
-    if (ones == 2 or twos == 2 or threes == 2 or fours == 2 or fives == 2 or sixes == 2) and \
-            (ones == 3 or twos == 3 or threes == 3 or fours == 3 or fives == 3 or sixes == 3):
+    roll_counts = [dice_list.count(value) for value in range(1, 7)]
+
+    if 2 in roll_counts and 3 in roll_counts:
         return True
     else:
         return False
 
 
 def of_a_kind_size(dice_list):
-    counts = [dice_roll_count(dice_list, 1), dice_roll_count(dice_list, 2), dice_roll_count(dice_list, 3),
-              dice_roll_count(dice_list, 4), dice_roll_count(dice_list, 5),
-              dice_roll_count(dice_list, 6)]
-    return max(counts)
+    return max([dice_list.count(value) for value in range(1,7)])
 
 
 def straight_size(dice_list):
