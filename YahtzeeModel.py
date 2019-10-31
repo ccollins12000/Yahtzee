@@ -103,30 +103,12 @@ def of_a_kind_size(dice_list):
 
 
 def straight_size(dice_list):
-    values = []
-    for die in dice_list:
-        values.append(die.value)
-
-    values.sort()
-    values = list(set(values))
-    straight_length = 1
-    longest_straight = 1
-    for die_index in range(1, len(values)):
-        current_die = values[die_index]
-        previous_die = values[die_index - 1]
-        if current_die == previous_die + 1:
-            straight_length += 1
-            if straight_length > longest_straight:
-                longest_straight = straight_length
-        elif current_die == previous_die:
-            straight_length = straight_length
-        else:
-            # Restart
-            straight_length = 1
-
-    return longest_straight
+    # generates list of count dice values 1-6 in order.  Any count of 0 breaks the straight
+    roll_counts = [str(dice_list.count(value)) for value in range(1,7)]
+    return len(max(''.join(roll_counts).split('0'), key=len))
 
 # Functions for score boxes
+
 
 def aces_points(dice_list):
     return dice_roll_count(dice_list, 1) * 1
@@ -438,4 +420,6 @@ class YahtzeeModel:
         """Select or un-select dice to be rolled"""
         self._selected_dice[die_index] = selected
         # return [self._selected_dice[selected_index] for selected_index in self._selected_dice]
+
+
 
