@@ -1,12 +1,16 @@
 from tkinter import *
 from tkinter import ttk as tk
 
-
-def empty_function():
-    pass
-
-
 class YahtzeeView:
+    """
+    This is a class for showing a yahtzee game window
+
+    Parameters:
+        master (tkinter master view object): the tkinter master view object or window the yahtzee game will be packed into
+        roll_function (function): the function that is run when the roll dice button is clicked
+        assign_function (function): the function that is executed when the assign roll button is clicked
+        end_turn_function (function): the function that is executed when the end turn button is cliecked
+    """
     def __init__(self, master, roll_function, assign_function, end_turn_function):
         self._game_logo_frame = tk.Button(master, text='Yahtzee')
         self._game_logo_frame.grid(row=0, column=0, rowspan = 2, sticky=N + S + E + W)
@@ -21,9 +25,9 @@ class YahtzeeView:
             self._dice[-1].view.grid(row=0, column=die_col)
             die_col += 1
 
-        self.btn_roll = tk.Button(master, text='Roll Dice', command=roll_function)
+        self._btn_roll = tk.Button(master, text='Roll Dice', command=roll_function)
         self._dice_frame.grid(row=0, column=1, rowspan=2, sticky=NSEW)
-        self.btn_roll.grid(row=0, column=2, sticky=N + S + E + W)
+        self._btn_roll.grid(row=0, column=2, sticky=N + S + E + W)
 
         self._rollsRemainingTxt = StringVar()
         self._rolls_remaining = 0
@@ -35,10 +39,10 @@ class YahtzeeView:
         self._score_card_frame = tk.Frame(master)
         self._score_card = ScoreCardView(self._score_card_frame)
         self._score_card_frame.grid(row=2, column=0, sticky=W)
-        self.btn_assign_roll = tk.Button(master, text="Assign Roll", command=assign_function)
-        self.btn_assign_roll.grid(row=3, column=0, sticky=N + S + E + W)
-        self.btn_end_turn = tk.Button(master, text="End Turn", command=end_turn_function)
-        self.btn_end_turn.grid(row=4, column=0, sticky=N + S + E + W)
+        self._btn_assign_roll = tk.Button(master, text="Assign Roll", command=assign_function)
+        self._btn_assign_roll.grid(row=3, column=0, sticky=N + S + E + W)
+        self._btn_end_turn = tk.Button(master, text="End Turn", command=end_turn_function)
+        self._btn_end_turn.grid(row=4, column=0, sticky=N + S + E + W)
 
         #Game stats/control properties
         self._game_stats_frame = tk.Frame(master)
@@ -46,21 +50,26 @@ class YahtzeeView:
         self._can_roll = True
 
     def update_die(self, die_index, value):
+        """Update a die at a certain index within the yahtzee game"""
         self._dice[die_index].last_roll = value
 
     def die_selected(self, die_index):
+        """Get whether or not the die at the given index is selected to roll or now"""
         return self._dice[die_index].selected
 
     def update_box(self, box_name, points, enabled):
+        """Update one of the score boxes within the yahtzee game view"""
         self._score_card.assign_points(box_name, points)
         self._score_card.box_enabled(box_name, enabled)
 
     @property
     def selected_box(self):
+        """Get which score box is selected"""
         return self._score_card.selection
 
     @property
     def rolls_remaining(self):
+        """Get or set the number of rolls remaining displayed in the yahtzee game view"""
         return self._rolls_remaining
 
     @rolls_remaining.setter
@@ -184,6 +193,8 @@ class ScoreCardView:
         Parameters:
             master (tk object): The tk master object to place the score card UI into
         """
+
+        # dictionary of instructions for creating each score box
         box_setup_instructions = {
             'Aces': {'Can Assign': True, 'Section': 'Upper'},
             'Twos': {'Can Assign': True, 'Section': 'Upper'},
@@ -207,28 +218,29 @@ class ScoreCardView:
         # Setup the main frame and variables
         self.mainFrame = tk.Frame(master)
         self.mainFrame.pack()
-        self.assign_selection = StringVar()
+        self._assign_selection = StringVar()
 
-        self.scoreBoxes = {}
+        # create each score box
+        self._score_boxes = {}
         for box_setup in box_setup_instructions:
             assignable = box_setup_instructions[box_setup]['Can Assign']
-            self.scoreBoxes[box_setup] = ScoreBoxView(self.mainFrame, box_setup, assignable, self.assign_selection)
+            self._score_boxes[box_setup] = ScoreBoxView(self.mainFrame, box_setup, assignable, self._assign_selection)
         rw = 0
-        for scoreBox in self.scoreBoxes:
-            self.scoreBoxes[scoreBox].points_view.grid(row=rw, column=1, sticky=NSEW)
-            self.scoreBoxes[scoreBox].selector.grid(row=rw, column=0, sticky=NSEW)
-            rw += 1
 
-        # Setup button for assigning roll
+        # pack each score box into the frame
+        for scoreBox in self._score_boxes:
+            self._score_boxes[scoreBox].points_view.grid(row=rw, column=1, sticky=NSEW)
+            self._score_boxes[scoreBox].selector.grid(row=rw, column=0, sticky=NSEW)
+            rw += 1
 
     @property
     def selection(self):
         """Get or set the selected score box on the score card.  Pass an empty string to deselect all boxes."""
-        return self.assign_selection.get()
+        return self._assign_selection.get()
 
     @selection.setter
     def selection(self, box_name):
-        self.assign_selection.set(box_name)
+        self._assign_selection.set(box_name)
 
     def assign_points(self, box_name, points):
         """
@@ -238,7 +250,7 @@ class ScoreCardView:
             box_name (tk str): The name of the box to update the points in
             points (bool): the number of points to place in the score box UI
         """
-        self.scoreBoxes[box_name].points = points
+        self._score_boxes[box_name].points = points
 
     def box_enabled(self, box_name, enabled):
         """
@@ -248,4 +260,4 @@ class ScoreCardView:
             box_name (tk str): The name of the box to disable/enable
             enabled (bool): Whether or not the box can be selected
         """
-        self.scoreBoxes[box_name].enabled = enabled
+        self._score_boxes[box_name].enabled = enabled

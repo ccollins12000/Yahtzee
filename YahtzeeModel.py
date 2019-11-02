@@ -111,27 +111,27 @@ def straight_size(dice_list):
 
 
 def aces_points(dice_list):
-    return dice_roll_count(dice_list, 1) * 1
+    return dice_list.count(1) * 1
 
 
 def twos_points(dice_list):
-    return dice_roll_count(dice_list, 2) * 2
+    return dice_list.count(2) * 2
 
 
 def threes_points(dice_list):
-    return dice_roll_count(dice_list, 3) * 3
+    return dice_list.count(3) * 3
 
 
 def fours_points(dice_list):
-    return dice_roll_count(dice_list, 4) * 4
+    return dice_list.count(4) * 4
 
 
 def fives_points(dice_list):
-    return dice_roll_count(dice_list, 5) * 5
+    return dice_list.count(5)* 5
 
 
 def sixes_points(dice_list):
-    return dice_roll_count(dice_list, 6) * 6
+    return dice_list.count(6) * 6
 
 
 def three_of_a_kind_points(dice_list):

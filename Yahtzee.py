@@ -2,11 +2,6 @@ from tkinter import *
 import YahtzeeViews
 import YahtzeeModel
 
-
-def empty_function():
-    pass
-
-
 class Yahtzee:
     def __init__(self, tk_master):
         self.view_to_model = {
