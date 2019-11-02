@@ -10,6 +10,12 @@ from tkinter import ttk as tk
 
 class PlayersView:
     def __init__(self, master, start_game_function):
+        """
+        A class object that is a UI for entering all the player names
+
+        :param master: the tk master object that the player entry form is grid into
+        :param start_game_function: the function that is executed when the start game button is clicked
+        """
         # initialize objects
         master.title('Enter Player Names: ')
         self.main_frame = tk.Frame(master)
@@ -26,6 +32,11 @@ class PlayersView:
         self.main_frame.pack()
 
     def add_player(self):
+        """
+        adds a player entry to the form
+
+        :return:
+        """
         # append player entry controls
         self.players.append([
             tk.Label(self.main_frame, text="Enter Player Name: "),
@@ -34,11 +45,12 @@ class PlayersView:
         ]
         )
 
+        # pack entry objects into view
         player_count = len(self.players)
         for view_index, view_obj in enumerate(self.players[-1]):
             view_obj.grid(row=player_count, column=view_index)
 
-        # move add button below controls
+        # move command buttons below the player entries
         self._btn_add_player.grid_forget()
         self._btn_add_player.grid(row=player_count + 1, column=0, sticky=N + W + E + S)
         self._btn_start_game.grid_forget()
