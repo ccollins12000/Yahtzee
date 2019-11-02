@@ -1,6 +1,55 @@
 from tkinter import *
 from tkinter import ttk as tk
 
+# class PlayerView:
+#     def __init__(self, master):
+#         player_types = {'Human', 'AI'}
+#
+#         self._player_type = tk.OptionMenu(master, *player_types)
+
+
+class PlayersView:
+    def __init__(self, master):
+        # initialize objects
+        self.main_frame = tk.Frame(master)
+        self.players = []
+
+        # button for adding players
+        self._btn_add_player = tk.Button(self.main_frame, text="+ Add Player", command=self.add_player)
+        self._btn_add_player.grid(row =0, column = 0, rowspan=2)
+
+        # add first player and pack in frame
+        self.add_player()
+        self.main_frame.pack()
+
+    # def remove_player(self, player_index):
+    #     self.players[player_index]
+    # def update_players(self):
+    #     for player_index, player in enumerate(self.players):
+    #         for view_index, view_object in player:
+    #             view_obj.grid(row=)
+
+    def add_player(self):
+        # append player entry controls
+        self.players.append([
+            tk.Label(self.main_frame, text="Enter Player Name: "),
+            tk.Entry(self.main_frame),
+            tk.Button(self.main_frame, text="- Remove Player")
+        ]
+        )
+
+        player_count = len(self.players)
+        for view_index, view_obj  in enumerate(self.players[-1]):
+            view_obj.grid(row=player_count, column=view_index)
+
+        # move add button below controls
+        self._btn_add_player.grid_forget()
+        self._btn_add_player.grid(row=player_count + 1, column=0, columnspan=2, sticky=N + W + E + S)
+
+# test = Tk()
+# p = PlayersView(test)
+# test.mainloop()
+
 class YahtzeeView:
     """
     This is a class for showing a yahtzee game window
