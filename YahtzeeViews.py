@@ -14,6 +14,7 @@ class YahtzeeView:
     def __init__(self, master, roll_function, assign_function, end_turn_function):
         self._game_logo_frame = tk.Button(master, text='Yahtzee')
         self._game_logo_frame.grid(row=0, column=0, rowspan = 2, sticky=N + S + E + W)
+        self._player_name = StringVar()
 
         #Dice views
         self._dice_frame = tk.Frame(master)
@@ -48,6 +49,15 @@ class YahtzeeView:
         self._game_stats_frame = tk.Frame(master)
         self._game_stats_frame.grid(row=2, column=1, rowspan=2, columnspan=2)
         self._can_roll = True
+        self._lbl_player_name = tk.Label(self._game_stats_frame, textvariable= self._player_name)
+        self._lbl_player_name.grid(row=0,column=0, sticky=N + S + E + W)
+    @property
+    def player_name(self):
+        return self.player_name.get()
+
+    @player_name.setter
+    def player_name(self, name):
+        self._player_name.set(name + ' may now take their turn.')
 
     def update_die(self, die_index, value):
         """Update a die at a certain index within the yahtzee game"""

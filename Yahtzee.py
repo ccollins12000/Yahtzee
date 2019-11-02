@@ -45,6 +45,7 @@ class Yahtzee:
     def update_view(self):
         self.update_score_card()
         self.update_dice()
+        self._view.player_name = self._model.current_player
         self._view.rolls_remaining = self._model.rolls_remaining
 
     def next_turn(self):

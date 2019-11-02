@@ -354,16 +354,39 @@ class ScoreCard:
         return self._grandTotal > other
 
 
+class Player:
+    def __init__(self, player_name):
+        self._player_name = player_name
+        self._score_card = ScoreCard()
+
+    @property
+    def player_name(self):
+        """Get the name of the player"""
+        return self._player_name
+
+    @property
+    def score_card(self):
+        """Return a reference to the score card"""
+        return self._score_card
+
+
+
 class YahtzeeModel:
     def __init__(self):
+        self._players = [Player("Charles"), Player("Hannah")]
+        self._current_player = 0
         self._turn = 13
         self._rolls_remaining = 3
         self._dice = []
-        self._score_card = ScoreCard()
+        self._score_card = self._players[self._current_player].score_card
         self._selected_dice = [True for selected_index in range(5)]
         self._assigned_roll = False
         for die_index in range(5):
             self._dice.append(Die())
+
+    @property
+    def current_player(self):
+        return self._players[self._current_player].player_name
 
     @property
     def score_card(self):
@@ -402,9 +425,13 @@ class YahtzeeModel:
 
     def next_turn(self):
         """Proceed to next turn"""
-        if self._assigned_roll == True:
+        if self._assigned_roll:
             if self._turn > 0:
-                self._turn -= 1
+                self._current_player = (self._current_player + 1) % len(self._players)
+
+                self._score_card = self._players[self._current_player].score_card
+                if self._current_player == 0:
+                    self._turn -= 1
                 self._rolls_remaining = 3
                 self._selected_dice = [True for selected_index in range(5)]
                 self._assigned_roll = False
@@ -420,6 +447,5 @@ class YahtzeeModel:
         """Select or un-select dice to be rolled"""
         self._selected_dice[die_index] = selected
         # return [self._selected_dice[selected_index] for selected_index in self._selected_dice]
-
 
 
