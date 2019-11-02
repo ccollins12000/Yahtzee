@@ -372,13 +372,15 @@ class Player:
 
 
 class YahtzeeModel:
-    def __init__(self):
-        self._players = [Player("Charles"), Player("Hannah")]
+    def __init__(self, player_name_list):
+        self._players = []
+        for player_name in player_name_list:
+            self._players.append(Player(player_name))
         self._current_player = 0
         self._turn = 13
         self._rolls_remaining = 3
         self._dice = []
-        self._score_card = self._players[self._current_player].score_card
+        self._current_score_card = self._players[self._current_player].score_card
         self._selected_dice = [True for selected_index in range(5)]
         self._assigned_roll = False
         for die_index in range(5):
@@ -390,7 +392,7 @@ class YahtzeeModel:
 
     @property
     def score_card(self):
-        return self._score_card
+        return self._current_score_card
 
     @property
     def rolls_remaining(self):
@@ -416,12 +418,12 @@ class YahtzeeModel:
 
     def assign_roll(self, box_name):
         # only assign roll if the box doesn't already have value and the roll hasn't already been assigned this turn
-        if self._assigned_roll or self._score_card.get_box_assigned(box_name):
-            return self._score_card.get_box_points(box_name)
+        if self._assigned_roll or self._current_score_card.get_box_assigned(box_name):
+            return self._current_score_card.get_box_points(box_name)
         else:
-            self._score_card.assign_roll(box_name, self._dice)
+            self._current_score_card.assign_roll(box_name, self._dice)
             self._assigned_roll = True
-            return self._score_card.get_box_points(box_name)
+            return self._current_score_card.get_box_points(box_name)
 
     def next_turn(self):
         """Proceed to next turn"""
@@ -429,7 +431,7 @@ class YahtzeeModel:
             if self._turn > 0:
                 self._current_player = (self._current_player + 1) % len(self._players)
 
-                self._score_card = self._players[self._current_player].score_card
+                self._current_score_card = self._players[self._current_player].score_card
                 if self._current_player == 0:
                     self._turn -= 1
                 self._rolls_remaining = 3

@@ -31,6 +31,13 @@ class PlayersView:
         self.add_player()
         self.main_frame.pack()
 
+    def get_player_names(self):
+        players = []
+        for player in self.players:
+            players.append(player[1].get())
+        return players
+
+
     def add_player(self):
         """
         adds a player entry to the form
@@ -55,6 +62,7 @@ class PlayersView:
         self._btn_add_player.grid(row=player_count + 1, column=0, sticky=N + W + E + S)
         self._btn_start_game.grid_forget()
         self._btn_start_game.grid(row=player_count + 1, column=1, columnspan=2, sticky=N + W + E + S)
+
 
 class YahtzeeView:
     """

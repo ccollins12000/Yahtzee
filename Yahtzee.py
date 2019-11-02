@@ -11,10 +11,18 @@ class Yahtzee:
             'Chance': 'Chance', 'Bonus': 'Bonus', 'Upper Total': 'Upper Total', 'Lower Total': 'Lower Total',
             'Grand Total': 'Grand Total'
         }
-        self._view = YahtzeeViews.YahtzeeView(tk_master, self.roll_dice, self.assign_roll ,self.next_turn)
-        self._model = YahtzeeModel.YahtzeeModel()
-        self.roll_dice()
+        self._master_tk = tk_master
+        self._view = None
+        self._model = None
+        self._collect_players_view = YahtzeeViews.PlayersView(tk_master, self.begin_game)
 
+    def begin_game(self):
+        player_names = []
+        player_names = self._collect_players_view.get_player_names()
+        self._collect_players_view.main_frame.pack_forget()
+        self._model = YahtzeeModel.YahtzeeModel(player_names)
+        self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll ,self.next_turn)
+        self.roll_dice()
         self._view.rolls_remaining = self._model.rolls_remaining
 
     def update_dice_select(self):
