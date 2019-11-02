@@ -18,7 +18,7 @@ class YahtzeeView:
         die_col = 0
         for die_index in range(5):
             self._dice.append(DieView(self._dice_frame, 6))
-            self._dice[-1].view.grid(row=0, column =die_col)
+            self._dice[-1].view.grid(row=0, column=die_col)
             die_col += 1
 
         self.btn_roll = tk.Button(master, text='Roll Dice', command=roll_function)
@@ -68,18 +68,6 @@ class YahtzeeView:
         self._rolls_remaining = value
         self._rollsRemainingTxt.set('Rolls Remaining: ' + str(self._rolls_remaining))
 
-    @property
-    def can_roll(self):
-        return self._can_roll
-
-    @can_roll.setter
-    def can_roll(self, enabled):
-        self._can_roll = enabled
-        if enabled:
-            self.btn_roll.config(state=NORMAL)
-        else:
-            self.btn_roll.config(state=DISABLED)
-
 
 class DieView:
     """
@@ -90,10 +78,8 @@ class DieView:
         last_roll (int): The number diplayed on the die
 
     """
-    def __init__(self, master, initial_roll=None):
-        self._last_roll = 6
-        if initial_roll is None:
-            self._last_roll = 6
+    def __init__(self, master, initial_roll=6):
+        self._last_roll = initial_roll
         self._image = PhotoImage(file="Die" + str(self._last_roll) + ".png")
         self._selected = IntVar(value=1)
         self.view = tk.Checkbutton(master, image=self._image, variable=self._selected)

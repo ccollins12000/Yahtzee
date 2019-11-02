@@ -9,9 +9,6 @@ def empty_function():
 
 class Yahtzee:
     def __init__(self, tk_master):
-        self._view = YahtzeeViews.YahtzeeView(tk_master, self.roll_dice, self.assign_roll ,self.next_turn)
-        self._model = YahtzeeModel.YahtzeeModel()
-        self.roll_dice()
         self.view_to_model = {
             'Aces': 'Aces', 'Twos': 'Twos', 'Threes': 'Threes', 'Fours': 'Fours', 'Fives': 'Fives', 'Sixes': 'Sixes',
             '3 of a Kind': '3 of a Kind', '4 of a Kind': '4 of a Kind', 'Full House': 'Full House',
@@ -19,6 +16,10 @@ class Yahtzee:
             'Chance': 'Chance', 'Bonus': 'Bonus', 'Upper Total': 'Upper Total', 'Lower Total': 'Lower Total',
             'Grand Total': 'Grand Total'
         }
+        self._view = YahtzeeViews.YahtzeeView(tk_master, self.roll_dice, self.assign_roll ,self.next_turn)
+        self._model = YahtzeeModel.YahtzeeModel()
+        self.roll_dice()
+
         self._view.rolls_remaining = self._model.rolls_remaining
 
     def update_dice_select(self):
@@ -49,6 +50,7 @@ class Yahtzee:
     def update_view(self):
         self.update_score_card()
         self.update_dice()
+        self._view.rolls_remaining = self._model.rolls_remaining
 
     def next_turn(self):
         self._model.next_turn()
@@ -58,7 +60,7 @@ class Yahtzee:
         self.update_dice_select()
         self._model.roll_dice()
         self.update_dice()
-        self._view.rolls_remaining = self._model.rolls_remaining
+        self.update_view()
 
     def assign_roll(self):
         box_name = self.view_to_model[self._view.selected_box]
