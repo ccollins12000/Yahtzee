@@ -9,46 +9,40 @@ from tkinter import ttk as tk
 
 
 class PlayersView:
-    def __init__(self, master):
+    def __init__(self, master, start_game_function):
         # initialize objects
+        master.title('Enter Player Names: ')
         self.main_frame = tk.Frame(master)
         self.players = []
 
         # button for adding players
         self._btn_add_player = tk.Button(self.main_frame, text="+ Add Player", command=self.add_player)
-        self._btn_add_player.grid(row =0, column = 0, rowspan=2)
+        self._btn_add_player.grid(row =0, column = 0)
+        self._btn_start_game =  tk.Button(self.main_frame, text="Start Game", command=start_game_function)
+        self._btn_start_game.grid(row=0,column=1)
 
         # add first player and pack in frame
         self.add_player()
         self.main_frame.pack()
 
-    # def remove_player(self, player_index):
-    #     self.players[player_index]
-    # def update_players(self):
-    #     for player_index, player in enumerate(self.players):
-    #         for view_index, view_object in player:
-    #             view_obj.grid(row=)
-
     def add_player(self):
         # append player entry controls
         self.players.append([
             tk.Label(self.main_frame, text="Enter Player Name: "),
-            tk.Entry(self.main_frame),
-            tk.Button(self.main_frame, text="- Remove Player")
+            tk.Entry(self.main_frame) # ,
+            #tk.Button(self.main_frame, text="- Remove Player")
         ]
         )
 
         player_count = len(self.players)
-        for view_index, view_obj  in enumerate(self.players[-1]):
+        for view_index, view_obj in enumerate(self.players[-1]):
             view_obj.grid(row=player_count, column=view_index)
 
         # move add button below controls
         self._btn_add_player.grid_forget()
-        self._btn_add_player.grid(row=player_count + 1, column=0, columnspan=2, sticky=N + W + E + S)
-
-# test = Tk()
-# p = PlayersView(test)
-# test.mainloop()
+        self._btn_add_player.grid(row=player_count + 1, column=0, sticky=N + W + E + S)
+        self._btn_start_game.grid_forget()
+        self._btn_start_game.grid(row=player_count + 1, column=1, columnspan=2, sticky=N + W + E + S)
 
 class YahtzeeView:
     """
