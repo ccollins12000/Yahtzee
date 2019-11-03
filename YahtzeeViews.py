@@ -70,7 +70,7 @@ class YahtzeeView:
 
     Parameters:
         master (tkinter master view object): the tkinter master view object or window the yahtzee game will be packed into
-        roll_function (function): the function that is run when the roll dice button is clicked
+        roll_function (function): the function that is run when the roll sdice button is clicked
         assign_function (function): the function that is executed when the assign roll button is clicked
         end_turn_function (function): the function that is executed when the end turn button is cliecked
     """
@@ -114,7 +114,6 @@ class YahtzeeView:
         self._can_roll = True
         self._lbl_player_name = tk.Label(self._game_stats_frame, textvariable= self._player_name)
         self._lbl_player_name.grid(row=0,column=0, sticky=N + S + E + W)
-    
 
     @property
     def player_name(self):
@@ -166,7 +165,17 @@ class DieView:
         self._last_roll = initial_roll
         self._image = PhotoImage(file="Die" + str(self._last_roll) + ".png")
         self._selected = IntVar(value=1)
-        self.view = tk.Checkbutton(master, image=self._image, variable=self._selected)
+        self.view = tk.Label(master, image=self._image)
+        #self.view = tk.Checkbutton(master, image=self._image, variable=self._selected)
+        self.view.bind("<Button-1>", self.toggle_selected)
+
+    def toggle_selected(self, event):
+        if self._selected.get() == 1:
+            self._selected.set(0)
+            print('unselected')
+        else:
+            self._selected.set(1)
+            print("selected")
 
     @property
     def selected(self):
@@ -176,6 +185,7 @@ class DieView:
     @selected.setter
     def selected(self, is_selected):
         self._selected.set(is_selected)
+        print("die selected")
 
     @property
     def last_roll(self):
