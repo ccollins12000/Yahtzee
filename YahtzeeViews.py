@@ -114,6 +114,8 @@ class YahtzeeView:
         self._can_roll = True
         self._lbl_player_name = tk.Label(self._game_stats_frame, textvariable= self._player_name)
         self._lbl_player_name.grid(row=0,column=0, sticky=N + S + E + W)
+    
+
     @property
     def player_name(self):
         return self.player_name.get()

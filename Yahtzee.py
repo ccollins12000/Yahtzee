@@ -64,7 +64,6 @@ class Yahtzee:
     def roll_dice(self):
         self.update_dice_select()
         self._model.roll_dice()
-        self.update_dice()
         self.update_view()
 
     def assign_roll(self):
