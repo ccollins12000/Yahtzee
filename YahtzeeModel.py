@@ -412,6 +412,7 @@ class YahtzeeModel:
         if self._rolls_remaining > 0 and self._assigned_roll == False:
             for die_index, die in enumerate(self._dice):
                 if self._selected_dice[die_index]:
+                    print('rolled', die_index)
                     die.roll()
             self._rolls_remaining = self._rolls_remaining - 1
         return self.get_dice()

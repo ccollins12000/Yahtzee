@@ -2,6 +2,7 @@ from tkinter import *
 import YahtzeeViews
 import YahtzeeModel
 
+
 class Yahtzee:
     def __init__(self, tk_master):
         self.view_to_model = {
@@ -25,6 +26,29 @@ class Yahtzee:
         self._master_tk.title("Play Yahtzee!")
         self.roll_dice()
         self._view.rolls_remaining = self._model.rolls_remaining
+
+    # Action Functions
+    def next_turn(self):
+        self._model.next_turn()
+        self.update_view() # careful with removing this the model selects all the dice for re-roll when turn ends.
+
+    def roll_dice(self):
+        self.update_dice_select()
+        self._model.roll_dice()
+        self.update_view()
+
+    def assign_roll(self):
+        box_name = self.view_to_model[self._view.selected_box]
+        self._model.assign_roll(box_name)
+        self.update_view()
+
+    # Updating view/model functions
+    def update_view(self):
+        self.update_score_card()
+        self.update_dice()
+        self._view.player_name = self._model.current_player
+        self._view.rolls_remaining = self._model.rolls_remaining
+        self.update_dice_select() # careful with removing this the model selects all the dice for re-roll when turn ends.
 
     def update_dice_select(self):
         for die_index in range(5):
@@ -51,25 +75,6 @@ class Yahtzee:
         for die_index, die_value in enumerate(dice_values):
             self._view.update_die(die_index, die_value)
 
-    def update_view(self):
-        self.update_score_card()
-        self.update_dice()
-        self._view.player_name = self._model.current_player
-        self._view.rolls_remaining = self._model.rolls_remaining
-
-    def next_turn(self):
-        self._model.next_turn()
-        self.update_view()
-
-    def roll_dice(self):
-        self.update_dice_select()
-        self._model.roll_dice()
-        self.update_view()
-
-    def assign_roll(self):
-        box_name = self.view_to_model[self._view.selected_box]
-        self._model.assign_roll(box_name)
-        self.update_view()
 
 
 yahtzee_tk = Tk()
