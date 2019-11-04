@@ -379,8 +379,8 @@ class Player:
 class YahtzeeModel:
     def __init__(self, player_name_list, avatar_file_list):
         self._players = []
-        for player_name, avatar_file in (player_name_list, avatar_file_list):
-            self._players.append(Player(player_name, avatar_file))
+        for index in range(len(player_name_list)):
+            self._players.append(Player(player_name_list[index], avatar_file_list[index]))
         self._current_player = 0
         self._turn = 13
         self._rolls_remaining = 3

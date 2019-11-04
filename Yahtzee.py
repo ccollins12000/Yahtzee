@@ -20,14 +20,17 @@ class Yahtzee:
 
     def begin_game(self):
         player_names = []
-        player_names = self._collect_players_view.get_player_names()
-        avatar_files = self._collect_players_view.get_avatar_files()
+        avatar_files = []
+        player_names.extend(self._collect_players_view.get_player_names())
+        avatar_files.extend( self._collect_players_view.get_avatar_files())
+
         self._collect_players_view.main_frame.pack_forget()
+
         self._model = YahtzeeModel.YahtzeeModel(player_names, avatar_files)
         self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
         self._master_tk.title("Play Yahtzee!")
         self.roll_dice()
-        self._view.rolls_remaining = self._model.rolls_remaining
+        self.update_view()
 
 
     # Action Functions
