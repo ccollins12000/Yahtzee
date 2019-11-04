@@ -103,7 +103,7 @@ class PlayersView:
         """
         # initialize objects
         master.title('Enter Player Names: ')
-        row_count = 2
+        row_count = 6
         self.main_frame = tk.Frame(master)
         self.players = [PlayerView(self.main_frame, "Avatar" + str(index) + ".png") for index in range(6)]
         for index, player in enumerate(self.players):

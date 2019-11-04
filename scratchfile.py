@@ -46,5 +46,15 @@ for roll in all_rolls_possible:
     counts[roll.count(6)] += 1/len(all_rolls_possible)*100
 
 print(counts)
-
-
+# reassin or assign and end turn
+# add in text for how scorebox calculated
+# option to sort dice
+# unselct scorebox when starting new turn
+# allow three dice rolls
+# choose player order
+# unselect all dice at beginning of turn
+# select all and unselect all buttons
+# calculate odds for each roll
+# Keep and roll option columns?
+# Error Messages
+# multiple yahtzees
