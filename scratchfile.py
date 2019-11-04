@@ -58,3 +58,4 @@ print(counts)
 # Keep and roll option columns?
 # Error Messages
 # multiple yahtzees
+# Error Handling if no player is chosen
