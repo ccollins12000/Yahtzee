@@ -16,16 +16,19 @@ class Yahtzee:
         self._view = None
         self._model = None
         self._collect_players_view = YahtzeeViews.PlayersView(tk_master, self.begin_game)
+        self._collect_players_view.show_view()
 
     def begin_game(self):
         player_names = []
         player_names = self._collect_players_view.get_player_names()
+        avatar_files = self._collect_players_view.get_avatar_files()
         self._collect_players_view.main_frame.pack_forget()
-        self._model = YahtzeeModel.YahtzeeModel(player_names)
-        self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll ,self.next_turn)
+        self._model = YahtzeeModel.YahtzeeModel(player_names, avatar_files)
+        self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
         self._master_tk.title("Play Yahtzee!")
         self.roll_dice()
         self._view.rolls_remaining = self._model.rolls_remaining
+
 
     # Action Functions
     def next_turn(self):
@@ -49,6 +52,7 @@ class Yahtzee:
         self._view.player_name = self._model.current_player
         self._view.rolls_remaining = self._model.rolls_remaining
         self.update_dice_select() # careful with removing this the model selects all the dice for re-roll when turn ends.
+        self._view.avatar_image = self._model.current_avatar
 
     def update_dice_select(self):
         for die_index in range(5):

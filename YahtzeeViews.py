@@ -25,12 +25,14 @@ class PlayerView:
         self.main_frame = tk.Frame(self._tk_master)
 
         # Avatar Image
+        self._avatar_file = avatar_file
         self._image_file = PhotoImage(file=avatar_file)
         self._image = tk.Label(self.main_frame, image=self._image_file)
         self._image.grid(row=0, column=0, rowspan=5, columnspan=5)
 
         #Player Controls
         self._btn_add = tk.Button(self.main_frame, text="+ Add Player", command=self.add_player)
+        self._add_label = tk.Label(self.main_frame, text = "                           ")
         self._btn_remove = tk.Button(self.main_frame, text="- Remove Player", command=self.remove_player)
         self._lbl_player_name = tk.Label(self.main_frame, text="Player Name: ")
         self._txt_player_name = tk.Entry(self.main_frame, width = 10)
@@ -46,12 +48,14 @@ class PlayerView:
         if self._added:
             # Remove add button and add controls for entering player name and removing if changed mind
             self._btn_add.grid_forget()
+            self._add_label.grid_forget()
             self._lbl_player_name.grid(row=5, column=0, columnspan=2, sticky=N + E + S + W)
             self._txt_player_name.grid(row=5, column=2, columnspan=3, sticky=N + E + S + W)
             self._btn_remove.grid(row=6, column=0, columnspan=5, sticky=N + E + S + W)
         else:
             # Remove controls for entering player name and flip back to add button
-            self._btn_add.grid(row=5, column=0, columnspan=5, rowspan=2, sticky=N + E + S + W)
+            self._btn_add.grid(row=5, column=0, columnspan=5, rowspan=1, sticky=N + E + S + W)
+            self._add_label.grid(row=6, column=0, columnspan=5, sticky=N + E + S + W,pady=(0,7))
             self._lbl_player_name.grid_forget()
             self._txt_player_name.grid_forget()
             self._btn_remove.grid_forget()
@@ -67,6 +71,10 @@ class PlayerView:
     @property
     def player_name(self):
         return self._txt_player_name.get()
+
+    @property
+    def avatar_file(self):
+        return self._avatar_file
 
     def add_player(self):
         """
@@ -97,13 +105,13 @@ class PlayersView:
         master.title('Enter Player Names: ')
         row_count = 2
         self.main_frame = tk.Frame(master)
-        self.players = [PlayerView(self.main_frame, "Avatar" + str(index) + ".png") for index in range(5)]
+        self.players = [PlayerView(self.main_frame, "Avatar" + str(index) + ".png") for index in range(6)]
         for index, player in enumerate(self.players):
             player.main_frame.grid(row=int(index/row_count), column=index%row_count)
         # button for adding players
 
         self._btn_start_game = tk.Button(self.main_frame, text="Start Game", command=start_game_function)
-        self._btn_start_game.grid(row=int(len(self.players)/row_count), column=len(self.players)%row_count, columnspan=len(self.players)%row_count + 1, stick=N + S + W + E)
+        self._btn_start_game.grid(row=int(len(self.players)/row_count), column=len(self.players)%row_count, columnspan=row_count - len(self.players)%row_count, stick=N + S + W + E)
 
         # add first player and pack in frame
 
@@ -115,6 +123,13 @@ class PlayersView:
         for player in self.players:
             if player.added:
                 all_players.append(player.player_name)
+        return all_players
+
+    def get_avatar_files(self):
+        all_players = []
+        for player in self.players:
+            if player.added:
+                all_players.append(player.avatar_file)
         return all_players
 
     def show_view(self):
@@ -132,12 +147,6 @@ class PlayersView:
         self.main_frame.pack_forget()
 
 
-yahtzee_tk = Tk()
-y = PlayersView(yahtzee_tk, empty_function)
-y.show_view()
-yahtzee_tk.mainloop()
-
-
 class YahtzeeView:
     """
     This is a class for showing a yahtzee game window
@@ -149,9 +158,13 @@ class YahtzeeView:
         end_turn_function (function): the function that is executed when the end turn button is cliecked
     """
     def __init__(self, master, roll_function, assign_function, end_turn_function):
-        self._game_logo_frame = tk.Button(master, text='Yahtzee')
-        self._game_logo_frame.grid(row=0, column=0, rowspan = 2, sticky=N + S + E + W)
+        #self._game_logo_frame = tk.Button(master, text='Yahtzee')
+        #self._game_logo_frame.grid(row=0, column=0, rowspan = 2, sticky=N + S + E + W)
         self._player_name = StringVar()
+
+        self._avatar_image = None
+        self._avatar_image_box = tk.Label(master, text='Yahtzee')
+        self._avatar_image_box.grid(row=0, column=0, rowspan = 2, sticky=N + S + E + W)
 
         #Dice views
         self._dice_frame = tk.Frame(master)
@@ -196,6 +209,15 @@ class YahtzeeView:
     @player_name.setter
     def player_name(self, name):
         self._player_name.set(name + ' may now take their turn.')
+
+    @property
+    def avatar_image(self):
+        return self._avatar_image
+
+    @avatar_image.setter
+    def avatar_image(self, image_file):
+        self._avatar_image = PhotoImage(file=image_file)
+        self._avatar_image_box.configure(image=self.avatar_image)
 
     def update_die(self, die_index, value):
         """Update a die at a certain index within the yahtzee game"""

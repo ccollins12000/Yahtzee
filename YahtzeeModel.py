@@ -355,9 +355,10 @@ class ScoreCard:
 
 
 class Player:
-    def __init__(self, player_name):
+    def __init__(self, player_name, avatar_file):
         self._player_name = player_name
         self._score_card = ScoreCard()
+        self._avatar_file = avatar_file
 
     @property
     def player_name(self):
@@ -369,13 +370,17 @@ class Player:
         """Return a reference to the score card"""
         return self._score_card
 
+    @property
+    def avatar_file(self):
+        return self._avatar_file
+
 
 
 class YahtzeeModel:
-    def __init__(self, player_name_list):
+    def __init__(self, player_name_list, avatar_file_list):
         self._players = []
-        for player_name in player_name_list:
-            self._players.append(Player(player_name))
+        for player_name, avatar_file in (player_name_list, avatar_file_list):
+            self._players.append(Player(player_name, avatar_file))
         self._current_player = 0
         self._turn = 13
         self._rolls_remaining = 3
@@ -389,6 +394,10 @@ class YahtzeeModel:
     @property
     def current_player(self):
         return self._players[self._current_player].player_name
+
+    @property
+    def current_avatar(self):
+        return self._players[self._current_player].avatar_file
 
     @property
     def score_card(self):
