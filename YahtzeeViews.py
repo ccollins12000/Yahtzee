@@ -51,7 +51,7 @@ class PlayerView:
             self._btn_remove.grid(row=6, column=0, columnspan=5, sticky=N + E + S + W)
         else:
             # Remove controls for entering player name and flip back to add button
-            self._btn_add.grid(row=5, column=0, columnspan=5, sticky=N + E + S + W)
+            self._btn_add.grid(row=5, column=0, columnspan=5, rowspan=2, sticky=N + E + S + W)
             self._lbl_player_name.grid_forget()
             self._txt_player_name.grid_forget()
             self._btn_remove.grid_forget()
