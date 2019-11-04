@@ -7,6 +7,83 @@ from tkinter import ttk as tk
 #
 #         self._player_type = tk.OptionMenu(master, *player_types)
 
+def empty_function():
+    pass
+
+class PlayerView:
+    """
+    A player picker view
+    """
+    def __init__(self, master, avatar_file):
+        """
+        The constructor function for a player picker view
+
+        :param master: the tk master object
+        :param master: the file name of the avatar
+        """
+        self._tk_master = master
+        self.main_frame = tk.Frame(self._tk_master)
+
+        # Avatar Image
+        self._image_file = PhotoImage(file=avatar_file)
+        self._image = tk.Label(self.main_frame, image=self._image_file)
+        self._image.grid(row=0, column=0, rowspan=5, columnspan=5)
+
+        #Player Controls
+        self._btn_add = tk.Button(self.main_frame, text="+ Add Player", command=self.add_player)
+        self._btn_remove = tk.Button(self.main_frame, text="- Remove Player", command=self.remove_player)
+        self._lbl_player_name = tk.Label(self.main_frame, text="Player Name: ")
+        self._txt_player_name = tk.Entry(self.main_frame, width = 10)
+
+        self._added = False
+        self._setup_controls()
+
+    def _setup_controls(self):
+        """
+        Display/Hide the player name enter, remove and add buttons
+        :return: None
+        """
+        if self._added:
+            # Remove add button and add controls for entering player name and removing if changed mind
+            self._btn_add.grid_forget()
+            self._lbl_player_name.grid(row=5, column=0, columnspan=2, sticky=N + E + S + W)
+            self._txt_player_name.grid(row=5, column=2, columnspan=3, sticky=N + E + S + W)
+            self._btn_remove.grid(row=6, column=0, columnspan=5, sticky=N + E + S + W)
+        else:
+            # Remove controls for entering player name and flip back to add button
+            self._btn_add.grid(row=5, column=0, columnspan=5, sticky=N + E + S + W)
+            self._lbl_player_name.grid_forget()
+            self._txt_player_name.grid_forget()
+            self._btn_remove.grid_forget()
+
+    @property
+    def added(self):
+        """
+        Get whether or not the player has been added to the game
+        :return: whether or not the player was added to the game
+        """
+        return self._added
+
+    @property
+    def player_name(self):
+        return self._txt_player_name.get()
+
+    def add_player(self):
+        """
+        Add the player to the game
+        :return: None
+        """
+        self._added = True
+        self._setup_controls()
+
+    def remove_player(self):
+        """
+        Remove the player from the game
+        :return: None
+        """
+        self._added = False
+        self._setup_controls()
+
 
 class PlayersView:
     def __init__(self, master, start_game_function):
@@ -18,50 +95,47 @@ class PlayersView:
         """
         # initialize objects
         master.title('Enter Player Names: ')
+        row_count = 2
         self.main_frame = tk.Frame(master)
-        self.players = []
-
+        self.players = [PlayerView(self.main_frame, "Avatar" + str(index) + ".png") for index in range(5)]
+        for index, player in enumerate(self.players):
+            player.main_frame.grid(row=int(index/row_count), column=index%row_count)
         # button for adding players
-        self._btn_add_player = tk.Button(self.main_frame, text="+ Add Player", command=self.add_player)
-        self._btn_add_player.grid(row =0, column = 0)
-        self._btn_start_game =  tk.Button(self.main_frame, text="Start Game", command=start_game_function)
-        self._btn_start_game.grid(row=0,column=1)
+
+        self._btn_start_game = tk.Button(self.main_frame, text="Start Game", command=start_game_function)
+        self._btn_start_game.grid(row=int(len(self.players)/row_count), column=len(self.players)%row_count, columnspan=len(self.players)%row_count + 1, stick=N + S + W + E)
 
         # add first player and pack in frame
-        self.add_player()
-        self.main_frame.pack()
 
     def get_player_names(self):
-        players = []
+        """
+        :return: All the players in the game
+        """
+        all_players = []
         for player in self.players:
-            players.append(player[1].get())
-        return players
+            if player.added:
+                all_players.append(player.player_name)
+        return all_players
 
-
-    def add_player(self):
+    def show_view(self):
         """
-        adds a player entry to the form
-
-        :return:
+        Packs the objects into the master TK object
+        :return: None
         """
-        # append player entry controls
-        self.players.append([
-            tk.Label(self.main_frame, text="Enter Player Name: "),
-            tk.Entry(self.main_frame) # ,
-            #tk.Button(self.main_frame, text="- Remove Player")
-        ]
-        )
+        self.main_frame.pack()
 
-        # pack entry objects into view
-        player_count = len(self.players)
-        for view_index, view_obj in enumerate(self.players[-1]):
-            view_obj.grid(row=player_count, column=view_index)
+    def hide_view(self):
+        """
+        Hides the objects into the master TK object
+        :return: None
+        """
+        self.main_frame.pack_forget()
 
-        # move command buttons below the player entries
-        self._btn_add_player.grid_forget()
-        self._btn_add_player.grid(row=player_count + 1, column=0, sticky=N + W + E + S)
-        self._btn_start_game.grid_forget()
-        self._btn_start_game.grid(row=player_count + 1, column=1, columnspan=2, sticky=N + W + E + S)
+
+yahtzee_tk = Tk()
+y = PlayersView(yahtzee_tk, empty_function)
+y.show_view()
+yahtzee_tk.mainloop()
 
 
 class YahtzeeView:
