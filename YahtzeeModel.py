@@ -355,10 +355,11 @@ class ScoreCard:
 
 
 class Player:
-    def __init__(self, player_name, avatar_file):
+    def __init__(self, player_name, avatar_file, player_type):
         self._player_name = player_name
         self._score_card = ScoreCard()
         self._avatar_file = avatar_file
+        self._player_type = player_type
 
     @property
     def player_name(self):
@@ -374,13 +375,19 @@ class Player:
     def avatar_file(self):
         return self._avatar_file
 
+    @property
+    def player_type(self):
+        return self._player_type
+
+
 
 
 class YahtzeeModel:
-    def __init__(self, player_name_list, avatar_file_list):
+    def __init__(self, player_name_list, avatar_file_list, player_types):
         self._players = []
         for index in range(len(player_name_list)):
-            self._players.append(Player(player_name_list[index], avatar_file_list[index]))
+            print(player_types[index])
+            self._players.append(Player(player_name_list[index], avatar_file_list[index], player_types[index]))
         self._current_player = 0
         self._turn = 13
         self._rolls_remaining = 3
@@ -390,6 +397,11 @@ class YahtzeeModel:
         self._assigned_roll = False
         for die_index in range(5):
             self._dice.append(Die())
+
+    @property
+    def current_player_type(self):
+        print(self._players[self._current_player].player_type)
+        return self._players[self._current_player].player_type
 
     @property
     def current_player(self):

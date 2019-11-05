@@ -21,22 +21,53 @@ class Yahtzee:
     def begin_game(self):
         player_names = []
         avatar_files = []
+        player_types = []
         player_names.extend(self._collect_players_view.get_player_names())
-        avatar_files.extend( self._collect_players_view.get_avatar_files())
+        avatar_files.extend(self._collect_players_view.get_avatar_files())
+        player_types.extend(self._collect_players_view.get_player_types())
 
         self._collect_players_view.main_frame.pack_forget()
 
-        self._model = YahtzeeModel.YahtzeeModel(player_names, avatar_files)
+        self._model = YahtzeeModel.YahtzeeModel(player_names, avatar_files, player_types)
         self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
         self._master_tk.title("Play Yahtzee!")
         self.roll_dice()
         self.update_view()
 
+    def lock_view(self):
+        self._view.lock_commands()
+
+    def unlock_view(self):
+        self._view.unlock_commands()
+
+    # AI FUNCTIONS
+
+    def assign_best_score_box(self):
+        max_value = -1
+        max_score_box = ''
+
+        for score_box in YahtzeeModel.assign_function_lookup.keys():
+            current_value = YahtzeeModel.assign_function_lookup[score_box](self._model.get_dice())
+            current_box = score_box
+            if current_value > max_value and not self._model.score_card.get_box_assigned(score_box):
+                max_value = current_value
+                max_score_box = current_box
+
+        self._model.assign_roll(max_score_box)
+        self.update_view()
 
     # Action Functions
     def next_turn(self):
         self._model.next_turn()
         self.update_view() # careful with removing this the model selects all the dice for re-roll when turn ends.
+        #doesn't work if first player is computer
+        # print(self._model.current_player_type)
+        print(self._model.current_player_type)
+        if self._model.current_player_type == 'Computer':
+            self._view.lock_commands()
+            self.assign_best_score_box()
+            self._view.unlock_commands()
+
 
     def roll_dice(self):
         self.update_dice_select()

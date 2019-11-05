@@ -33,9 +33,18 @@ class PlayerView:
         #Player Controls
         self._btn_add = tk.Button(self.main_frame, text="+ Add Player", command=self.add_player)
         self._add_label = tk.Label(self.main_frame, text = "                           ")
+        OPTIONS = [
+            "Human",
+            "Computer",
+        ]
+        self._player_type = StringVar()
+        self._player_type.set(OPTIONS[0])
+        self._cbo_player_type = OptionMenu(self.main_frame, self._player_type, *OPTIONS)
         self._btn_remove = tk.Button(self.main_frame, text="- Remove Player", command=self.remove_player)
         self._lbl_player_name = tk.Label(self.main_frame, text="Player Name: ")
         self._txt_player_name = tk.Entry(self.main_frame, width = 10)
+
+
 
         self._added = False
         self._setup_controls()
@@ -51,13 +60,15 @@ class PlayerView:
             self._add_label.grid_forget()
             self._lbl_player_name.grid(row=5, column=0, columnspan=2, sticky=N + E + S + W)
             self._txt_player_name.grid(row=5, column=2, columnspan=3, sticky=N + E + S + W)
-            self._btn_remove.grid(row=6, column=0, columnspan=5, sticky=N + E + S + W)
+            self._cbo_player_type.grid(row=6, column=0, columnspan=2, sticky=N + E + S + W)
+            self._btn_remove.grid(row=6, column=2, columnspan=3, sticky=N + E + S + W)
         else:
             # Remove controls for entering player name and flip back to add button
             self._btn_add.grid(row=5, column=0, columnspan=5, rowspan=1, sticky=N + E + S + W)
             self._add_label.grid(row=6, column=0, columnspan=5, sticky=N + E + S + W,pady=(0,7))
             self._lbl_player_name.grid_forget()
             self._txt_player_name.grid_forget()
+            self._cbo_player_type.grid_forget()
             self._btn_remove.grid_forget()
 
     @property
@@ -67,6 +78,14 @@ class PlayerView:
         :return: whether or not the player was added to the game
         """
         return self._added
+
+    @property
+    def player_type(self):
+        """
+        Get whether or not the player is a Human or computer
+        :return: whether or not the player is a Human or computer
+        """
+        return self._player_type.get()
 
     @property
     def player_name(self):
@@ -130,6 +149,13 @@ class PlayersView:
         for player in self.players:
             if player.added:
                 all_players.append(player.avatar_file)
+        return all_players
+
+    def get_player_types(self):
+        all_players = []
+        for player in self.players:
+            if player.added:
+                all_players.append(player.player_type)
         return all_players
 
     def show_view(self):
@@ -201,6 +227,16 @@ class YahtzeeView:
         self._can_roll = True
         self._lbl_player_name = tk.Label(self._game_stats_frame, textvariable= self._player_name)
         self._lbl_player_name.grid(row=0,column=0, sticky=N + S + E + W)
+
+    def lock_commands(self):
+        self._btn_assign_roll.config(state=DISABLED)
+        self._btn_end_turn.config(state=DISABLED)
+        self._btn_roll.config(state=DISABLED)
+
+    def unlock_commands(self):
+        self._btn_assign_roll.config(state=NORMAL)
+        self._btn_end_turn.config(state=NORMAL)
+        self._btn_roll.config(state=NORMAL)
 
     @property
     def player_name(self):

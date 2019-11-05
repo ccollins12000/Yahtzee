@@ -11,6 +11,7 @@ points = {}
 
 max_value = -1
 max_score_box = ''
+
 for score_box in YahtzeeModel.assign_function_lookup.keys():
     current_value = YahtzeeModel.assign_function_lookup[score_box](dice)
     current_box = score_box
