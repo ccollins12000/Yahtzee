@@ -84,6 +84,8 @@ class Yahtzee:
 
 
 
+
+
 yahtzee_tk = Tk()
 y = Yahtzee(yahtzee_tk)
 yahtzee_tk.mainloop()
