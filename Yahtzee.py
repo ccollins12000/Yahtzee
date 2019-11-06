@@ -1,7 +1,7 @@
 from tkinter import *
 import YahtzeeViews
 import YahtzeeModel
-
+import time
 
 class Yahtzee:
     def __init__(self, tk_master):
@@ -20,15 +20,16 @@ class Yahtzee:
 
 
     def begin_game(self):
-        self._collect_players_view.main_frame.pack_forget()
-        # Build Players
-        for player in self._collect_players_view.get_players():
-            self._model.add_player(YahtzeeModel.Player(player.player_name, player.avatar_file, player.player_type))
-        self._model.start_game()
-        self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
-        self._master_tk.title("Play Yahtzee!")
-        self.update_view()
-        self.check_take_ai_turn()
+        if len(self._collect_players_view.get_players()) > 0:
+            self._collect_players_view.main_frame.pack_forget()
+            # Build Players
+            for player in self._collect_players_view.get_players():
+                self._model.add_player(YahtzeeModel.Player(player.player_name, player.avatar_file, player.player_type))
+            self._model.start_game()
+            self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
+            self._master_tk.title("Play Yahtzee!")
+            self.update_view()
+            self.check_take_ai_turn()
 
     def lock_view(self):
         self._view.lock_commands()
@@ -55,6 +56,7 @@ class Yahtzee:
     def check_take_ai_turn(self):
         if self._model.current_player.player_type == 'Computer':
             self._view.lock_commands()
+            time.sleep(1)
             self.assign_best_score_box()
             self._view.unlock_commands()
 
