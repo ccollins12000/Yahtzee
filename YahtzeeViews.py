@@ -134,8 +134,11 @@ class YahtzeeView:
         assign_function (function): the function that is executed when the assign roll button is clicked
         end_turn_function (function): the function that is executed when the end turn button is cliecked
     """
-    def __init__(self, master, roll_function, assign_function, end_turn_function):
+    def __init__(self, tk_master, roll_function, assign_function, end_turn_function):
         self._player_name = StringVar()
+
+        self._main_frame = tk.Frame(tk_master)
+        master = self._main_frame
 
         self._avatar_image = None
         self._avatar_image_box = tk.Label(master, text='Yahtzee')
@@ -232,6 +235,19 @@ class YahtzeeView:
         self._rolls_remaining = value
         self._rollsRemainingTxt.set('Rolls Remaining: ' + str(self._rolls_remaining))
 
+    def show_view(self):
+        """
+        Packs the objects into the master TK object
+        :return: None
+        """
+        self._main_frame.pack()
+
+    def hide_view(self):
+        """
+        Hides the objects into the master TK object
+        :return: None
+        """
+        self._main_frame.pack_forget()
 
 class DieView:
     """

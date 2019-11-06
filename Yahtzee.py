@@ -13,7 +13,7 @@ class Yahtzee:
             'Grand Total': 'Grand Total'
         }
         self._master_tk = tk_master
-        self._view = None
+        self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
         self._model = YahtzeeModel.YahtzeeModel()
         self._collect_players_view = YahtzeeViews.PlayersView(tk_master, self.begin_game)
         self._collect_players_view.show_view()
@@ -26,7 +26,7 @@ class Yahtzee:
             for player in self._collect_players_view.get_players():
                 self._model.add_player(YahtzeeModel.Player(player.player_name, player.avatar_file, player.player_type))
             self._model.start_game()
-            self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
+            self._view.show_view()
             self._master_tk.title("Play Yahtzee!")
             self.update_view()
             self.check_take_ai_turn()
@@ -56,7 +56,6 @@ class Yahtzee:
     def check_take_ai_turn(self):
         if self._model.current_player.player_type == 'Computer':
             self._view.lock_commands()
-            time.sleep(1)
             self.assign_best_score_box()
             self._view.unlock_commands()
 
