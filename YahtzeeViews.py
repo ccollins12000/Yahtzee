@@ -1,15 +1,5 @@
 from tkinter import *
 from tkinter import ttk as tk
-import YahtzeeModel
-
-# class PlayerView:
-#     def __init__(self, master):
-#         player_types = {'Human', 'AI'}
-#
-#         self._player_type = tk.OptionMenu(master, *player_types)
-
-def empty_function():
-    pass
 
 class PlayerView:
     """
