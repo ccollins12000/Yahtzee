@@ -21,9 +21,12 @@ class Yahtzee:
 
     def begin_game(self):
         self._collect_players_view.main_frame.pack_forget()
+        # Build Players
+        for player in self._collect_players_view.get_players():
+            self._model.add_player(YahtzeeModel.Player(player.player_name, player.avatar_file, player.player_type))
+        self._model.start_game()
         self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
         self._master_tk.title("Play Yahtzee!")
-        self.roll_dice()
         self.update_view()
 
     def lock_view(self):
@@ -54,7 +57,7 @@ class Yahtzee:
         self.update_view() # careful with removing this the model selects all the dice for re-roll when turn ends.
         #doesn't work if first player is computer
         # print(self._model.current_player_type)
-        if self._model.current_player_type == 'Computer':
+        if self._model.current_player.player_type == 'Computer':
             self._view.lock_commands()
             self.assign_best_score_box()
             self._view.unlock_commands()
@@ -74,10 +77,10 @@ class Yahtzee:
     def update_view(self):
         self.update_score_card()
         self.update_dice()
-        self._view.player_name = self._model.current_player
+        self._view.player_name = self._model.current_player.player_name
         self._view.rolls_remaining = self._model.rolls_remaining
         self.update_dice_select() # careful with removing this the model selects all the dice for re-roll when turn ends.
-        self._view.avatar_image = self._model.current_avatar
+        self._view.avatar_image = self._model.current_player.avatar_file
 
     def update_dice_select(self):
         for die_index in range(5):

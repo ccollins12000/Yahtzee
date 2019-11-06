@@ -419,8 +419,8 @@ class YahtzeeModel:
 
     def start_game(self):
         if len(self._players) > 0:
-            self._game_started = True
             self.next_turn()
+            self._game_started = True
         else:
             raise Exception('There must be at least one player to start the game.')
 
@@ -453,7 +453,7 @@ class YahtzeeModel:
 
     def next_turn(self):
         """Proceed to next turn"""
-        if self._assigned_roll and self._game_started:
+        if self._assigned_roll or not self._game_started:
             if self._turn > 0:
                 self._current_player = (self._current_player + 1) % len(self._players)
 
