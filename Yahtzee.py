@@ -28,6 +28,7 @@ class Yahtzee:
         self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
         self._master_tk.title("Play Yahtzee!")
         self.update_view()
+        self.check_take_ai_turn()
 
     def lock_view(self):
         self._view.lock_commands()
@@ -50,6 +51,11 @@ class Yahtzee:
 
         self._model.assign_roll(max_score_box)
         self.update_view()
+    def check_take_ai_turn(self):
+        if self._model.current_player.player_type == 'Computer':
+            self._view.lock_commands()
+            self.assign_best_score_box()
+            self._view.unlock_commands()
 
     # Action Functions
     def next_turn(self):
@@ -57,10 +63,7 @@ class Yahtzee:
         self.update_view() # careful with removing this the model selects all the dice for re-roll when turn ends.
         #doesn't work if first player is computer
         # print(self._model.current_player_type)
-        if self._model.current_player.player_type == 'Computer':
-            self._view.lock_commands()
-            self.assign_best_score_box()
-            self._view.unlock_commands()
+        self.check_take_ai_turn()
 
 
     def roll_dice(self):
