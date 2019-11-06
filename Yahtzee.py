@@ -51,6 +51,7 @@ class Yahtzee:
 
         self._model.assign_roll(max_score_box)
         self.update_view()
+
     def check_take_ai_turn(self):
         if self._model.current_player.player_type == 'Computer':
             self._view.lock_commands()
