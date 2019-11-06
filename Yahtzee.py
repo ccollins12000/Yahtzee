@@ -14,21 +14,13 @@ class Yahtzee:
         }
         self._master_tk = tk_master
         self._view = None
-        self._model = None
+        self._model = YahtzeeModel.YahtzeeModel()
         self._collect_players_view = YahtzeeViews.PlayersView(tk_master, self.begin_game)
         self._collect_players_view.show_view()
 
+
     def begin_game(self):
-        player_names = []
-        avatar_files = []
-        player_types = []
-        player_names.extend(self._collect_players_view.get_player_names())
-        avatar_files.extend(self._collect_players_view.get_avatar_files())
-        player_types.extend(self._collect_players_view.get_player_types())
-
         self._collect_players_view.main_frame.pack_forget()
-
-        self._model = YahtzeeModel.YahtzeeModel(player_names, avatar_files, player_types)
         self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
         self._master_tk.title("Play Yahtzee!")
         self.roll_dice()
@@ -62,7 +54,6 @@ class Yahtzee:
         self.update_view() # careful with removing this the model selects all the dice for re-roll when turn ends.
         #doesn't work if first player is computer
         # print(self._model.current_player_type)
-        print(self._model.current_player_type)
         if self._model.current_player_type == 'Computer':
             self._view.lock_commands()
             self.assign_best_score_box()

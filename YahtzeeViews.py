@@ -31,12 +31,8 @@ class PlayerView:
         self._image.grid(row=0, column=0, rowspan=5, columnspan=5)
 
         #Player Controls
-        self._btn_add = tk.Button(self.main_frame, text="+ Add Player", command=self.add_player)
-        self._add_label = tk.Label(self.main_frame, text = "                           ")
-        OPTIONS = [
-            "Human",
-            "Computer",
-        ]
+        self._btn_add_remove = tk.Button(self.main_frame, text="+ Add Player", command=self.add_player)
+        OPTIONS = ["Human", "Computer"]
         self._player_type = StringVar()
         self._player_type.set(OPTIONS[0])
         self._cbo_player_type = OptionMenu(self.main_frame, self._player_type, *OPTIONS)
@@ -122,7 +118,7 @@ class PlayersView:
         """
         # initialize objects
         master.title('Enter Player Names: ')
-        row_count = 6
+        row_count = 6 # all avatar images in directory will get packed into rows and columns
         self.main_frame = tk.Frame(master)
         self.players = [PlayerView(self.main_frame, "Avatar" + str(index) + ".png") for index in range(6)]
         for index, player in enumerate(self.players):
@@ -134,28 +130,14 @@ class PlayersView:
 
         # add first player and pack in frame
 
-    def get_player_names(self):
+    def get_players(self):
         """
-        :return: All the players in the game
+        :return: all the players in the game
         """
         all_players = []
         for player in self.players:
             if player.added:
-                all_players.append(player.player_name)
-        return all_players
-
-    def get_avatar_files(self):
-        all_players = []
-        for player in self.players:
-            if player.added:
-                all_players.append(player.avatar_file)
-        return all_players
-
-    def get_player_types(self):
-        all_players = []
-        for player in self.players:
-            if player.added:
-                all_players.append(player.player_type)
+                all_players.append(player)
         return all_players
 
     def show_view(self):
@@ -184,8 +166,6 @@ class YahtzeeView:
         end_turn_function (function): the function that is executed when the end turn button is cliecked
     """
     def __init__(self, master, roll_function, assign_function, end_turn_function):
-        #self._game_logo_frame = tk.Button(master, text='Yahtzee')
-        #self._game_logo_frame.grid(row=0, column=0, rowspan = 2, sticky=N + S + E + W)
         self._player_name = StringVar()
 
         self._avatar_image = None

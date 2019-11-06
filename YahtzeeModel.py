@@ -383,33 +383,25 @@ class Player:
 
 
 class YahtzeeModel:
-    def __init__(self, player_name_list, avatar_file_list, player_types):
+    def __init__(self):
         self._players = []
-        for index in range(len(player_name_list)):
-            print(player_types[index])
-            self._players.append(Player(player_name_list[index], avatar_file_list[index], player_types[index]))
-        self._current_player = 0
-        self._turn = 13
-        self._rolls_remaining = 3
+        self._game_started = False
+        self._current_player = -1
+        self._turn = 14 # begin game calls next turn which at current player = 0 subtracts this down to 13
+        self._rolls_remaining = 0
         self._dice = []
-        self._current_score_card = self._players[self._current_player].score_card
+        self._current_score_card = None
         self._selected_dice = [True for selected_index in range(5)]
         self._assigned_roll = False
         for die_index in range(5):
             self._dice.append(Die())
 
     @property
-    def current_player_type(self):
-        print(self._players[self._current_player].player_type)
-        return self._players[self._current_player].player_type
-
-    @property
     def current_player(self):
-        return self._players[self._current_player].player_name
-
-    @property
-    def current_avatar(self):
-        return self._players[self._current_player].avatar_file
+        if len(self._players) > 0:
+            return self._players[self._current_player]
+        else:
+            return None
 
     @property
     def score_card(self):
@@ -425,12 +417,25 @@ class YahtzeeModel:
         """Return the number of turns remaining in the game"""
         return self._turn
 
+    def start_game(self):
+        if len(self._players) > 0:
+            self._game_started = True
+            self.next_turn()
+        else:
+            raise Exception('There must be at least one player to start the game.')
+
+    def add_player(self, player):
+        self._players.append(player)
+
+    def remove_player(self, player_index):
+        return self._players.pop(player_index)
+
     def get_dice(self):
         return [die.value for die in self._dice]
 
     def roll_dice(self):
         """Roll the dice that have been selected"""
-        if self._rolls_remaining > 0 and self._assigned_roll == False:
+        if self._rolls_remaining > 0 and not self._assigned_roll:
             for die_index, die in enumerate(self._dice):
                 if self._selected_dice[die_index]:
                     die.roll()
@@ -439,7 +444,7 @@ class YahtzeeModel:
 
     def assign_roll(self, box_name):
         # only assign roll if the box doesn't already have value and the roll hasn't already been assigned this turn
-        if self._assigned_roll or self._current_score_card.get_box_assigned(box_name):
+        if self._assigned_roll or self._current_score_card.get_box_assigned(box_name) or not self._game_started:
             return self._current_score_card.get_box_points(box_name)
         else:
             self._current_score_card.assign_roll(box_name, self._dice)
@@ -448,7 +453,7 @@ class YahtzeeModel:
 
     def next_turn(self):
         """Proceed to next turn"""
-        if self._assigned_roll:
+        if self._assigned_roll and self._game_started:
             if self._turn > 0:
                 self._current_player = (self._current_player + 1) % len(self._players)
 
