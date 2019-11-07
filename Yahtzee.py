@@ -60,6 +60,9 @@ class Yahtzee:
 
             self._view._main_frame.update()
             time.sleep(1)
+            # Account for straights
+            # Account for full house
+            # Account for boxes already assigned
             while self._model.rolls_remaining > 0 and YahtzeeModel.of_a_kind_size(self._model.get_dice()) < 5:
                 dice = self._model.get_dice()
                 value_going_for = max(dice, key=dice.count)
