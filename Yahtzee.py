@@ -12,6 +12,14 @@ class Yahtzee:
             'Chance': 'Chance', 'Bonus': 'Bonus', 'Upper Total': 'Upper Total', 'Lower Total': 'Lower Total',
             'Grand Total': 'Grand Total'
         }
+        self.box_values = {
+            'Aces': 1,
+            'Twos': 2,
+            'Threes': 3,
+            'Fours': 4,
+            'Fives': 5,
+            'Sixes': 6
+        }
         self._master_tk = tk_master
         self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
         self._model = YahtzeeModel.YahtzeeModel()
@@ -52,6 +60,13 @@ class Yahtzee:
 
         self._model.assign_roll(max_score_box)
         self.update_view()
+
+    def get_values_not_achieved(self):
+        values_needed = []
+        for box in self.box_values:
+            if not self._model.score_card.get_box_assigned(box):
+                values_needed.append(self.box_values[box])
+        return values_needed
 
     def check_take_ai_turn(self):
         if self._model.current_player.player_type == 'Computer':
