@@ -73,6 +73,7 @@ class Yahtzee:
                 time.sleep(1)
             self.assign_best_score_box()
             self._view.unlock_commands()
+            self.next_turn()
 
     # Action Functions
     def next_turn(self):
