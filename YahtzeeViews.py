@@ -215,6 +215,9 @@ class YahtzeeView:
         """Get whether or not the die at the given index is selected to roll or now"""
         return self._dice[die_index].selected
 
+    def update_die_selected(self, die_index, selected):
+        self._dice[die_index].selected = selected
+
     def update_box(self, box_name, points, enabled):
         """Update one of the score boxes within the yahtzee game view"""
         self._score_card.assign_points(box_name, points)
