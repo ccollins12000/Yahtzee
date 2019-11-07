@@ -64,7 +64,6 @@ class Yahtzee:
                 dice = self._model.get_dice()
                 value_going_for = max(dice, key=dice.count)
                 for die_index, die in enumerate(dice):
-                    print(die_index)
                     self._view.update_die_selected(die_index, not die == value_going_for)
                 self._view._main_frame.update()
                 time.sleep(1)
@@ -72,6 +71,7 @@ class Yahtzee:
                 self._view._main_frame.update()
                 time.sleep(1)
             self.assign_best_score_box()
+            self._view._main_frame.update()
             self._view.unlock_commands()
             self.next_turn()
 
