@@ -56,6 +56,9 @@ class Yahtzee:
     def check_take_ai_turn(self):
         if self._model.current_player.player_type == 'Computer':
             self._view.lock_commands()
+            # must call update before pausing for https://stackoverflow.com/questions/30057844/python-tkinter-time-sleep
+            self._view._main_frame.update()
+            time.sleep(1)
             self.assign_best_score_box()
             self._view.unlock_commands()
 
@@ -63,8 +66,6 @@ class Yahtzee:
     def next_turn(self):
         self._model.next_turn()
         self.update_view() # careful with removing this the model selects all the dice for re-roll when turn ends.
-        #doesn't work if first player is computer
-        # print(self._model.current_player_type)
         self.check_take_ai_turn()
 
 

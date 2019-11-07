@@ -1,4 +1,5 @@
 import YahtzeeModel
+
 all_rolls_possible = []
 for value1 in range(1, 7):
     print(value1)
@@ -9,6 +10,10 @@ for value1 in range(1, 7):
                     all_rolls_possible.append([value1, value2, value3, value4, value5])
 
 print(len(all_rolls_possible))
+
+
+
+
 
 #full house
 full_house_rolls = []
