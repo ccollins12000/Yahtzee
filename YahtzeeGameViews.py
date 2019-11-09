@@ -4,6 +4,7 @@ from ScoreCardView import *
 from PlayerView import *
 from DieView import *
 
+
 class GameSummary:
     def __init__(self, master):
         self._tk_master = master
@@ -216,6 +217,7 @@ class YahtzeeView:
 
 
 def main():
+    """Preview of the Game Views"""
     yahtzee_tk = Tk()
     y = GameSummary(yahtzee_tk)
     y.add_player("Avatar0.png", "Player1")
