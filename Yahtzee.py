@@ -107,10 +107,11 @@ class Yahtzee:
     def next_turn(self):
         self._model.next_turn()
         self.update_view()  # careful with removing this the model selects all the dice for re-roll when turn ends.
-        self.check_take_ai_turn()
         if self._model.game_over:
             self._view.hide_view()
             self._end_game_view.show_view()
+        else:
+            self.check_take_ai_turn()
 
 
     def roll_dice(self):

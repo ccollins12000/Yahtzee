@@ -84,7 +84,7 @@ class YahtzeeModel:
 
     def setup_turn(self):
         #get player variables
-        self._current_score_card = self._players[self._current_player].score_card
+        self._current_score_card = self._players[self.calculate_player_index()].score_card
 
         # Setup and roll dice
         self._rolls_remaining = 3
@@ -97,6 +97,7 @@ class YahtzeeModel:
         """Proceed to next turn"""
         if self._game_started and not self._game_complete and self._assigned_roll == True:
             self._turn = self._turn - 1
+            print(self._turn)
             if self._turn > 0:
                 self.setup_turn()
             else:
