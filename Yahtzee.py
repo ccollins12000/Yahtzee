@@ -134,9 +134,6 @@ class Yahtzee:
         self._view.avatar_image = self._model.current_player.avatar_file
 
 
-
-
-
 yahtzee_tk = Tk()
 y = Yahtzee(yahtzee_tk)
 yahtzee_tk.mainloop()
