@@ -24,7 +24,7 @@ class YahtzeeModel:
     @property
     def current_player(self):
         if len(self._players) > 0:
-            return self._players[self._current_player]
+            return self._players[self.calculate_player_index()]
         else:
             return None
 
@@ -97,7 +97,6 @@ class YahtzeeModel:
         """Proceed to next turn"""
         if self._game_started and not self._game_complete and self._assigned_roll == True:
             self._turn = self._turn - 1
-            print(self._turn)
             if self._turn > 0:
                 self.setup_turn()
             else:

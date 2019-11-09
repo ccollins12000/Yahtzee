@@ -113,7 +113,6 @@ class Yahtzee:
         else:
             self.check_take_ai_turn()
 
-
     def roll_dice(self):
         self._dice_controller.update_dice_select()
         self._model.roll_dice()
