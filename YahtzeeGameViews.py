@@ -4,6 +4,36 @@ from ScoreCardView import *
 from PlayerView import *
 from DieView import *
 
+class GameSummary:
+    def __init__(self, master):
+        self._tk_master = master
+        self._main_frame = tk.Frame(self._tk_master)
+        self._players = []
+        self._images = []
+        self._avatar_images = []
+        self._player_names = []
+        self._score_cards = []
+
+    def add_player(self, avatar_file, player_name):
+        self._images.append(PhotoImage(file=avatar_file))
+        self._players.append(
+            {"Name": tk.Label(self._main_frame, text=player_name),
+             "Image": tk.Label(self._main_frame, image=self._images[-1]),
+             "Score Card": ScoreCardView(self._main_frame)}
+        )
+        player = self._players[-1]
+        player_index = len(self._players) - 1
+        player["Name"].grid(row=0, column=player_index, sticky=N + S + E + W)
+        player["Image"].grid(row=1, column=player_index, sticky=N + S + E + W)
+        player["Score Card"].grid(row=2, column=player_index, sticky=N + S + E + W)
+
+    def show_view(self):
+        self._main_frame.pack()
+
+    def hide_view(self):
+        self._main_frame.pack_forget()
+
+
 class PlayersView:
     def __init__(self, master, start_game_function):
         """
@@ -181,3 +211,8 @@ class YahtzeeView:
         self._main_frame.pack_forget()
 
 
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
