@@ -3,6 +3,39 @@ import YahtzeeViews
 import YahtzeeModel
 import time
 
+
+class ScoreCardController:
+    def __init__(self, view, model):
+        self._view = view
+        self._model = model
+        self.view_to_model = {
+            'Aces': 'Aces', 'Twos': 'Twos', 'Threes': 'Threes', 'Fours': 'Fours', 'Fives': 'Fives', 'Sixes': 'Sixes',
+            '3 of a Kind': '3 of a Kind', '4 of a Kind': '4 of a Kind', 'Full House': 'Full House',
+            'Small Straight': 'Small Straight', 'Large Straight': 'Large Straight', 'Yahtzee': 'Yahtzee',
+            'Chance': 'Chance', 'Bonus': 'Bonus', 'Upper Total': 'Upper Total', 'Lower Total': 'Lower Total',
+            'Grand Total': 'Grand Total'
+        }
+
+    def update_view(self):
+        for box in self.view_to_model:
+            view_name = box
+            model_name = self.view_to_model[box]
+            model_points = self._model.get_box_points(model_name)
+            model_assigned = self._model.get_box_assigned(model_name)
+
+            if model_assigned:
+                self._view.assign_points(view_name, model_points)
+                self._view.box_enabled(view_name, not model_assigned)
+            else:
+                self._view.assign_points(view_name, '')
+                self._view.box_enabled(view_name, not model_assigned)
+
+
+# class DiceController:
+#     def __init__(self, dice_views, dice_models):
+
+
+
 class Yahtzee:
     def __init__(self, tk_master):
         self.view_to_model = {
@@ -25,6 +58,7 @@ class Yahtzee:
         self._model = YahtzeeModel.YahtzeeModel()
         self._collect_players_view = YahtzeeViews.PlayersView(tk_master, self.begin_game)
         self._collect_players_view.show_view()
+        self._score_card_controller = ScoreCardController(self._view._score_card, self._model.score_card)
 
 
     def begin_game(self):
@@ -38,6 +72,7 @@ class Yahtzee:
             self._master_tk.title("Play Yahtzee!")
             self.update_view()
             self.check_take_ai_turn()
+
 
     def lock_view(self):
         self._view.lock_commands()
@@ -112,7 +147,8 @@ class Yahtzee:
 
     # Updating view/model functions
     def update_view(self):
-        self.update_score_card()
+        self._score_card_controller = ScoreCardController(self._view._score_card, self._model.score_card)
+        self._score_card_controller.update_view()
         self.update_dice()
         self._view.player_name = self._model.current_player.player_name
         self._view.rolls_remaining = self._model.rolls_remaining
@@ -127,17 +163,6 @@ class Yahtzee:
                 view_selected = False
             self._model.toggle_die_for_roll(die_index, view_selected)
 
-    def update_score_card(self):
-        for box in self.view_to_model:
-            view_name = box
-            model_name = self.view_to_model[box]
-            model_points = self._model.score_card.get_box_points(model_name)
-            model_assigned = self._model.score_card.get_box_assigned(model_name)
-
-            if model_assigned:
-                self._view.update_box(view_name, model_points, not model_assigned)
-            else:
-                self._view.update_box(view_name, '', not model_assigned)
 
     def update_dice(self):
         dice_values = self._model.get_dice()

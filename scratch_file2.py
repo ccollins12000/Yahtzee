@@ -139,5 +139,6 @@ class ScoreCardController:
             else:
                 self._view.assign_points(view_name, '')
 
+            self._view.box_enabled(view_name, not model_assigned)
 
 
