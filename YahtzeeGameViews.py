@@ -1,81 +1,8 @@
 from tkinter import *
 from tkinter import ttk as tk
 from ScoreCardView import *
-
-class PlayerView:
-    """
-    A player picker view
-    """
-    def __init__(self, master, avatar_file, default_name):
-        """
-        The constructor function for a player picker view
-
-        :param master: the tk master object
-        :param master: the file name of the avatar
-        """
-        self._tk_master = master
-        self.main_frame = tk.Frame(self._tk_master)
-
-        # Avatar Image
-        self._avatar_file = avatar_file
-        self._image_file = PhotoImage(file=avatar_file)
-        self._image = tk.Label(self.main_frame, image=self._image_file)
-        self._image.grid(row=1, column=0, columnspan=2, sticky=N + S + E + W)
-
-        # Player Controls
-        self._btn_add_remove = tk.Button(self.main_frame, text="  + Add Player  ", command=self.toggle_player)
-        self._btn_add_remove.grid(row=2, column=0, columnspan=2, sticky=N + S + E + W)
-        # Player Type
-        OPTIONS = ["Human", "Computer"]
-        self._player_type = StringVar()
-        self._player_type.set(OPTIONS[0])
-        self._cbo_player_type = OptionMenu(self.main_frame, self._player_type, *OPTIONS)
-        self._cbo_player_type.grid(row=0, column=0, sticky=N + S + E + W, columnspan=2)
-        self._lbl_player_name = tk.Label(self.main_frame, text="Player Name: ")
-        self._lbl_player_name.grid(row=3, column=0, sticky=N + S + E + W)
-        self._txt_player_name = tk.Entry(self.main_frame, width=10, text=default_name)
-        self._txt_player_name.grid(row=3, column=1, sticky=N + S + E + W)
-        self._txt_player_name.delete(0, END)
-        self._txt_player_name.insert(0, default_name)
-
-        self._added = False
-
-    @property
-    def added(self):
-        """
-        Get whether or not the player has been added to the game
-        :return: whether or not the player was added to the game
-        """
-        return self._added
-
-    @property
-    def player_type(self):
-        """
-        Get whether or not the player is a Human or computer
-        :return: whether or not the player is a Human or computer
-        """
-        return self._player_type.get()
-
-    @property
-    def player_name(self):
-        return self._txt_player_name.get()
-
-    @property
-    def avatar_file(self):
-        return self._avatar_file
-
-    def toggle_player(self):
-        """
-        Add/Remove the player to the game
-        :return: None
-        """
-        if self._added:
-            self._added = False
-            self._btn_add_remove.configure(text="  + Add Player   ")
-        else:
-            self._added = True
-            self._btn_add_remove.configure(text="- Remove Player")
-
+from PlayerView import *
+from DieView import *
 
 class PlayersView:
     def __init__(self, master, start_game_function):
@@ -252,61 +179,5 @@ class YahtzeeView:
         :return: None
         """
         self._main_frame.pack_forget()
-
-class DieView:
-    """
-    This is a class to display a single die that can be selected
-
-    Attributes:
-        selected (bool): Whether or not the die is selected
-        last_roll (int): The number diplayed on the die
-
-    """
-    def __init__(self, master, initial_roll=6):
-        self._last_roll = initial_roll
-        self._image = PhotoImage(file="Die" + str(self._last_roll) + "_selected.png")
-        self._selected = IntVar(value=1)
-        self.view = tk.Label(master, image=self._image)
-        #self.view = tk.Checkbutton(master, image=self._image, variable=self._selected)
-        self.view.bind("<Button-1>", self.toggle_selected)
-
-    def set_image(self, value, selected):
-        if selected == 1:
-            self._image = PhotoImage(file="Die" + str(value) + "_selected.png")
-
-        else:
-            self._image = PhotoImage(file="Die" + str(value) + ".png")
-        self.view.configure(image=self._image)
-
-    def toggle_selected(self, event):
-        if self._selected.get() == 1:
-            self._selected.set(0)
-        else:
-            self._selected.set(1)
-        self.set_image(self._last_roll, self._selected.get())
-
-
-    @property
-    def selected(self):
-        """Get or set whether the die is selected. Toggles the checkbox control"""
-        return self._selected.get()
-
-    @selected.setter
-    def selected(self, is_selected):
-        self._selected.set(is_selected)
-        self.set_image(self.last_roll, self._selected.get())
-
-    @property
-    def last_roll(self):
-        """Get or set the number displayed on the die"""
-        return self._last_roll
-
-    @last_roll.setter
-    def last_roll(self, value):
-        if 1 <= value <= 6:
-            self._last_roll = value
-            self.set_image(self._last_roll, self._selected.get())
-        else:
-            raise Exception('Value of die view must be between 1 and 6')
 
 

@@ -1,6 +1,7 @@
 from tkinter import *
-import YahtzeeViews
+import YahtzeeGameViews
 import YahtzeeModel
+from PlayerModel import *
 import time
 
 
@@ -71,9 +72,9 @@ class Yahtzee:
             'Sixes': 6
         }
         self._master_tk = tk_master
-        self._view = YahtzeeViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
+        self._view = YahtzeeGameViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
         self._model = YahtzeeModel.YahtzeeModel()
-        self._collect_players_view = YahtzeeViews.PlayersView(tk_master, self.begin_game)
+        self._collect_players_view = YahtzeeGameViews.PlayersView(tk_master, self.begin_game)
         self._collect_players_view.show_view()
         self._score_card_controller = ScoreCardController(self._view._score_card, self._model.score_card)
         self._dice_controller = DiceController(
@@ -88,7 +89,7 @@ class Yahtzee:
             self._collect_players_view.main_frame.pack_forget()
             # Build Players
             for player in self._collect_players_view.get_players():
-                self._model.add_player(YahtzeeModel.Player(player.player_name, player.avatar_file, player.player_type))
+                self._model.add_player(Player(player.player_name, player.avatar_file, player.player_type))
             self._model.start_game()
             self._view.show_view()
             self._master_tk.title("Play Yahtzee!")
