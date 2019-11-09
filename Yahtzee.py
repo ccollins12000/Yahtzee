@@ -53,8 +53,6 @@ class DiceController:
         self.update_dice()
 
 
-
-
 class Yahtzee:
     def __init__(self, tk_master):
         self.view_to_model = {
