@@ -6,14 +6,20 @@ class YahtzeeModel:
     def __init__(self):
         self._players = []
         self._game_started = False
+        self._game_complete = False
         self._current_player = -1
-        self._turn = 14 # begin game calls next turn which at current player = 0 subtracts this down to 13
+        self._turn = 0 # begin game calls next turn which at current player = 0 subtracts this down to 13
         self._rolls_remaining = 0
         self._dice = []
+        self._winner = None
         self._current_score_card = None
         self._assigned_roll = False
         for die_index in range(5):
             self._dice.append(Die())
+
+    @property
+    def game_over(self):
+        return self._game_complete
 
     @property
     def current_player(self):
@@ -37,11 +43,17 @@ class YahtzeeModel:
         return self._turn
 
     def start_game(self):
+        self._game_complete = False
         if len(self._players) > 0:
-            self.next_turn()
+            self._turn = len(self._players) * 13
+            self._current_player = self.calculate_player_index()
+            self.setup_turn()
             self._game_started = True
         else:
             raise Exception('There must be at least one player to start the game.')
+
+    def calculate_player_index(self):
+        return self._turn % len(self._players)
 
     def add_player(self, player):
         self._players.append(player)
@@ -70,25 +82,29 @@ class YahtzeeModel:
             self._assigned_roll = True
             return self._current_score_card.get_box_points(box_name)
 
+    def setup_turn(self):
+        #get player variables
+        self._current_score_card = self._players[self._current_player].score_card
+
+        # Setup and roll dice
+        self._rolls_remaining = 3
+        self._assigned_roll = False
+        for die in self._dice:
+            die.selected = True
+        self.roll_dice()
+
     def next_turn(self):
         """Proceed to next turn"""
-        if self._assigned_roll or not self._game_started:
+        if self._game_started and not self._game_complete and self._assigned_roll == True:
+            self._turn = self._turn - 1
             if self._turn > 0:
-                self._current_player = (self._current_player + 1) % len(self._players)
-
-                self._current_score_card = self._players[self._current_player].score_card
-                if self._current_player == 0:
-                    self._turn -= 1
-                self._rolls_remaining = 3
-                for die in self._dice:
-                    die.selected = True
-                self._assigned_roll = False
-                self.roll_dice()
+                self.setup_turn()
             else:
                 self.end_game()
 
     def end_game(self):
         """End the game and calculate winner"""
-        pass
+        self._game_started = False
+        self._game_complete = True
 
 
