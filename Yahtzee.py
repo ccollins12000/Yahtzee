@@ -30,6 +30,7 @@ class Yahtzee:
         self._collect_players_view = YahtzeeGameViews.PlayersView(tk_master, self.begin_game)
         self._collect_players_view.show_view()
         self._score_card_controller = ScoreCardController(self._view._score_card, self._model.score_card)
+        self._player_score_card_controllers = []
         self._dice_controller = DiceController(
             [die_view for die_view in self._view._dice],
             [die for die in self._model._dice]
@@ -42,6 +43,7 @@ class Yahtzee:
             for player in self._collect_players_view.get_players():
                 self._model.add_player(Player(player.player_name, player.avatar_file, player.player_type))
                 self._end_game_view.add_player(player.avatar_file, player.player_name)
+                self._player_score_card_controllers.append(ScoreCardController(self._end_game_view._players[-1]["Score Card View"], self._model._players[-1].score_card))
             self._model.start_game()
             self._view.show_view()
             self._master_tk.title("Play Yahtzee!")
@@ -109,6 +111,8 @@ class Yahtzee:
         self.update_view()  # careful with removing this the model selects all the dice for re-roll when turn ends.
         if self._model.game_over:
             self._view.hide_view()
+            for score_card in self._player_score_card_controllers:
+                score_card.update_view()
             self._end_game_view.show_view()
         else:
             self.check_take_ai_turn()
