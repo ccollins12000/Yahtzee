@@ -18,16 +18,26 @@ class Die:
             else:
                 raise Exception('The value of a die must be between 1 and 6')
 
+        self._selected = True
+
     def roll(self):
         """Rolls the die"""
         self._value = r.randrange(1, 7)
 
-    def __str__(self):
-        return "A die with value of " + str(self.value) + '\n'
+    @property
+    def selected(self):
+        return self._selected
+
+    @selected.setter
+    def selected(self, value):
+        self._selected = value
 
     @property
     def value(self):
         return self._value
+
+    def __str__(self):
+        return "A die with value of " + str(self.value) + '\n'
 
     def __add__(self, other):
         return self.value + other
@@ -391,7 +401,6 @@ class YahtzeeModel:
         self._rolls_remaining = 0
         self._dice = []
         self._current_score_card = None
-        self._selected_dice = [True for selected_index in range(5)]
         self._assigned_roll = False
         for die_index in range(5):
             self._dice.append(Die())
@@ -437,7 +446,7 @@ class YahtzeeModel:
         """Roll the dice that have been selected"""
         if self._rolls_remaining > 0 and not self._assigned_roll:
             for die_index, die in enumerate(self._dice):
-                if self._selected_dice[die_index]:
+                if die.selected:
                     die.roll()
             self._rolls_remaining = self._rolls_remaining - 1
         return self.get_dice()
@@ -461,7 +470,8 @@ class YahtzeeModel:
                 if self._current_player == 0:
                     self._turn -= 1
                 self._rolls_remaining = 3
-                self._selected_dice = [True for selected_index in range(5)]
+                for die in self._dice:
+                    die.selected = True
                 self._assigned_roll = False
                 self.roll_dice()
             else:

@@ -31,8 +31,27 @@ class ScoreCardController:
                 self._view.box_enabled(view_name, not model_assigned)
 
 
-# class DiceController:
-#     def __init__(self, dice_views, dice_models):
+class DiceController:
+    def __init__(self, dice_views, dice_models):
+        self._dice_views = dice_views
+        self._dice_models = dice_models
+
+    def update_dice_select(self):
+        for die_view, die_model in zip(self._dice_views, self._dice_models):
+            if die_view.selected == 1:
+                view_selected = True
+            else:
+                view_selected = False
+            die_model.selected = view_selected
+
+    def update_dice(self):
+        for die_view, die_model in zip(self._dice_views, self._dice_models):
+            die_view.last_roll = die_model.value
+
+    def update_view(self):
+        self.update_dice_select()
+        self.update_dice()
+
 
 
 
@@ -59,6 +78,11 @@ class Yahtzee:
         self._collect_players_view = YahtzeeViews.PlayersView(tk_master, self.begin_game)
         self._collect_players_view.show_view()
         self._score_card_controller = ScoreCardController(self._view._score_card, self._model.score_card)
+        self._dice_controller = DiceController(
+            [die_view for die_view in self._view._dice],
+            [die for die in self._model._dice]
+        )
+
 
 
     def begin_game(self):
@@ -136,7 +160,7 @@ class Yahtzee:
 
 
     def roll_dice(self):
-        self.update_dice_select()
+        self._dice_controller.update_dice_select()
         self._model.roll_dice()
         self.update_view()
 
@@ -149,25 +173,11 @@ class Yahtzee:
     def update_view(self):
         self._score_card_controller = ScoreCardController(self._view._score_card, self._model.score_card)
         self._score_card_controller.update_view()
-        self.update_dice()
+        self._dice_controller.update_dice()
         self._view.player_name = self._model.current_player.player_name
         self._view.rolls_remaining = self._model.rolls_remaining
-        self.update_dice_select() # careful with removing this the model selects all the dice for re-roll when turn ends.
+        self._dice_controller.update_dice_select() # careful with removing this the model selects all the dice for re-roll when turn ends.
         self._view.avatar_image = self._model.current_player.avatar_file
-
-    def update_dice_select(self):
-        for die_index in range(5):
-            if self._view.die_selected(die_index) == 1:
-                view_selected = True
-            else:
-                view_selected = False
-            self._model.toggle_die_for_roll(die_index, view_selected)
-
-
-    def update_dice(self):
-        dice_values = self._model.get_dice()
-        for die_index, die_value in enumerate(dice_values):
-            self._view.update_die(die_index, die_value)
 
 
 
