@@ -43,10 +43,20 @@ def straight(dice):
                 dice_to_keep.append(False)
             elif die == 3 or die == 4:
                 dice_to_keep.append(True)
-            elif straight_size(dice) < 5 and (die == 1 or die == 6):
+            elif straight_size(dice) < 4 and (die == 6 or die ==1):
                 dice_to_keep.append(False)
             else:
-                dice_to_keep.append(True)
+                roll_counts = [dice.count(value) for value in range(1, 7)]
+                if die == 1 and roll_counts[1] > 0:
+                    dice_to_keep.append(True)
+                elif die == 6 and roll_counts[-2] > 0:
+                    dice_to_keep.append(True)
+                elif roll_counts[die - 2] > 0 or roll_counts[die] > 0:
+                    dice_to_keep.append(True)
+                else:
+                    dice_to_keep.append(False)
+
+
         return dice_to_keep
     else:
         return [False for index in range(5)]
