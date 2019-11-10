@@ -153,7 +153,7 @@ def decide_roll(dice, score_card):
     if len(extra_dice_counts) > 0:
         extra_flag = (min(extra_dice_counts) == 0)
     lower_flag = False
-    if len(lower_dice_counts) > 0
+    if len(lower_dice_counts) > 0:
         lower_flag = (min(lower_dice_counts) == 0 )
 
     #can error here on min if empty
