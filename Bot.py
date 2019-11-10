@@ -61,6 +61,7 @@ def yahtzee(dice):
 def chance(dice):
     return [die == 6 for die in dice]
 
+
 def straight(dice):
     if straight_size(dice) < 5:
         dice_to_keep = []
@@ -91,6 +92,7 @@ def full_house(dice):
         to_keep.append( (counts[index] != 1 and occurence[index] in [1,2,3]))
     return to_keep
 
+
 check_dice_upper = {
     'Aces': aces,
     'Twos': twos,
@@ -100,14 +102,13 @@ check_dice_upper = {
     'Sixes': sixes,
     'Small Straight': straight,
     'Large Straight': straight,
-    'Full House': full_house,
+
 }
 
 check_dice_lower = {
+    'Full House': full_house,
     '3 of a Kind': three_of_a_kind,
     '4 of a Kind': four_of_a_kind,
-
-
 }
 
 check_dice_extras = {
@@ -131,9 +132,6 @@ def decide_roll(dice, score_card):
     if len(dice_counts) == 0:
         for box in check_dice_extras:
             checks.append(check_dice_extras[box](dice))
-            dice_counts = [sum(dice) for dice in checks]
-
-    rolls = max(checks, key=sum)
 
     return max(checks, key=sum)
 
@@ -142,7 +140,7 @@ def decide_box(dice, score_card):
     max_value = -1
     max_score_box = ''
 
-    if of_a_kind_size(dice) != 5:
+    if of_a_kind_size(dice) != 5 or score_card.get_box_assigned('Yahtzee'):
         for score_box in assign_function_lookup.keys():
             current_value = assign_function_lookup[score_box](dice)
             current_box = score_box
