@@ -23,8 +23,9 @@ class YahtzeeModel:
 
     @property
     def current_player(self):
+        player_index = self._turn % len(self._players)
         if len(self._players) > 0:
-            return self._players[self.calculate_player_index()]
+            return self._players[player_index]
         else:
             return None
 
@@ -46,14 +47,10 @@ class YahtzeeModel:
         self._game_complete = False
         if len(self._players) > 0:
             self._turn = len(self._players) * 13
-            self._current_player = self.calculate_player_index()
             self.setup_turn()
             self._game_started = True
         else:
             raise Exception('There must be at least one player to start the game.')
-
-    def calculate_player_index(self):
-        return self._turn % len(self._players)
 
     def add_player(self, player):
         self._players.append(player)
@@ -84,7 +81,7 @@ class YahtzeeModel:
 
     def setup_turn(self):
         #get player variables
-        self._current_score_card = self._players[self.calculate_player_index()].score_card
+        self._current_score_card = self.current_player.score_card
 
         # Setup and roll dice
         self._rolls_remaining = 3

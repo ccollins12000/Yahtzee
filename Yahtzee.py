@@ -44,6 +44,8 @@ class Yahtzee:
                 self._model.add_player(Player(player.player_name, player.avatar_file, player.player_type))
                 self._end_game_view.add_player(player.avatar_file, player.player_name)
                 self._player_score_card_controllers.append(ScoreCardController(self._end_game_view._players[-1]["Score Card View"], self._model._players[-1].score_card))
+
+            # start game
             self._model.start_game()
             self._view.show_view()
             self._master_tk.title("Play Yahtzee!")
