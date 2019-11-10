@@ -63,21 +63,21 @@ def four_of_a_kind_points(dice_list):
 
 
 def full_house_points(dice_list):
-    if check_full_house(dice_list):
+    if check_full_house(dice_list) or check_yahtzee(dice_list):
         return 25
     else:
         return 0
 
 
 def small_straight_points(dice_list):
-    if straight_size(dice_list) >= 4:
+    if straight_size(dice_list) >= 4 or check_yahtzee(dice_list):
         return 30
     else:
         return 0
 
 
 def large_straight_points(dice_list):
-    if straight_size(dice_list) >= 5:
+    if straight_size(dice_list) >= 5 or check_yahtzee(dice_list):
         return 40
     else:
         return 0
@@ -110,6 +110,14 @@ assign_function_lookup = {
     'Chance': chance_points
 }
 
+score_box_value_lookup = {
+    1: 'Aces',
+    2: 'Twos',
+    3: 'Threes',
+    4: 'Fours',
+    5: 'Fives',
+    6: 'Sixes'
+}
 
 class ScoreBox:
     """
@@ -146,6 +154,7 @@ class ScoreBox:
 
 class ScoreCard:
     def __init__(self):
+        self._yahtzee_count = 0
         self._aces = ScoreBox('Aces')
         self._twos = ScoreBox('Twos')
         self._threes = ScoreBox('Threes')
@@ -191,6 +200,9 @@ class ScoreCard:
         for box in self._lower_section:
             total += box.points
 
+        if self.get_box("Yahtzee").points > 0:
+            total = total + (self._yahtzee_count - 1) * 100 # Yahtzee Bonus
+
         self._lowerTotal = total
 
         #Total Points
@@ -218,8 +230,17 @@ class ScoreCard:
                 return box
 
     def assign_roll(self, box_name, dice):
-        self.get_box(box_name).assign_points(dice)
+        if check_yahtzee(dice):
+            self._yahtzee_count = self._yahtzee_count + 1
+
+        if check_yahtzee(dice) and not self.get_box('Yahtzee').assigned:
+            self.get_box('Yahtzee').assign_points(dice)
+        elif check_yahtzee(dice) and not self.get_box(score_box_value_lookup[dice[0].value]).assigned:
+            self.get_box(score_box_value_lookup[dice[0].value]).assign_points(dice)
+        else:
+            self.get_box(box_name).assign_points(dice)
         self.update_points()
+        print(self._grandTotal)
 
     def get_box_points(self, box_name):
         box = self.get_box(box_name)
