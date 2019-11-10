@@ -1,6 +1,36 @@
 from ScoreCardModel import *
 from YahtzeeModel import *
 
+dice = [3,3,6,4,1]
+
+def get_straights(dice):
+    sorted_dice = dice[:]
+    sorted_dice.sort()
+    straights = []
+
+    counts = [dice.count(value) > 0 for value in range(1, 7)]
+    print(counts)
+    straight_size = []
+    occ = 0
+    for index in range(len(counts)):
+        if counts[index] > 0:
+            occ = occ + 1
+        else:
+            occ = 0
+        straight_size.append(occ)
+
+    largest_straight = max(straight_size)
+    index = straight_size.index(largest_straight)
+
+    straight = []
+    while index > 0:
+        if straight_size[index] == 0:
+            break
+        straight.append(index + 1)
+        index = index - 1
+
+    return straight
+
 def aces(dice):
     return [die == 1 for die in dice]
 
@@ -46,17 +76,10 @@ def straight(dice):
             elif straight_size(dice) < 4 and (die == 6 or die ==1):
                 dice_to_keep.append(False)
             else:
-                roll_counts = [dice.count(value) for value in range(1, 7)]
-                if die == 1 and roll_counts[1] > 0:
-                    dice_to_keep.append(True)
-                elif die == 6 and roll_counts[-2] > 0:
-                    dice_to_keep.append(True)
-                elif roll_counts[die - 2] > 0 or roll_counts[die] > 0:
+                if die in get_straights(dice):
                     dice_to_keep.append(True)
                 else:
                     dice_to_keep.append(False)
-
-
         return dice_to_keep
     else:
         return [False for index in range(5)]
