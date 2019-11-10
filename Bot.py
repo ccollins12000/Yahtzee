@@ -1,32 +1,4 @@
 from ScoreCardModel import *
-# dice = [YahtzeeModel.Die() for i in range(5)]
-# print(dice)
-# for die in dice:
-#     print(die.value, end = '')
-#     print()
-#
-#
-# points = {}
-#
-#
-# max_value = -1
-# max_score_box = ''
-#
-# for score_box in YahtzeeModel.assign_function_lookup.keys():
-#     current_value = YahtzeeModel.assign_function_lookup[score_box](dice)
-#     current_box = score_box
-#     if current_value > max_value:
-#         max_value = current_value
-#         max_score_box = current_box
-#
-# print(max_score_box, max_value)
-#
-
-import itertools as i
-
-# Full_House
-score_card = ScoreCard()
-dice = [3,3, 5, 6, 2]
 
 def aces(dice):
     return [die == 1 for die in dice]
@@ -72,11 +44,6 @@ def full_house(dice):
         to_keep.append( (counts[index] != 1 and occurence[index] in [1,2,3]))
     return to_keep
 
-
-
-
-
-
 check_dice_upper = {
     'Aces': aces,
     'Twos': twos,
@@ -94,6 +61,7 @@ check_dice_lower = {
     'Large Straight': large_straight
 }
 
+
 def decide_roll(dice, score_card):
     checks = []
     dice_counts = []
@@ -103,33 +71,3 @@ def decide_roll(dice, score_card):
             dice_counts = [sum(dice) for dice in checks]
 
     return max(checks, key=sum)
-
-
-
-decide_roll(dice, score_card)
-
-
-
-
-#
-#
-# counts = {value:dice.count(value) for value in dice}
-# print(counts)
-#
-#
-# # Dice with highest match
-# roll_count = 3
-# if roll_count > 0:
-#     print(max(dice, key=dice.count))
-#
-# print(Y.straight_size(dice))
-#
-
-# def full_house_odds(dice, remaining_rolls):
-#     counts = {value: dice.count(value) for value in dice}
-#     possible_rolls = 6*5
-#     roll_combinations = len(list(i.combinations([1,2,3,4,5], 3)))
-#     total_possibilities = possible_rolls * roll_combinations
-
-
-
