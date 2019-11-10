@@ -15,7 +15,7 @@ class YahtzeeModel:
         self._assigned_roll = False
         for die_index in range(5):
             # self._dice.append(Die())
-            self._dice.append(Die(6))
+            self._dice.append(Die())
 
     @property
     def game_over(self):
@@ -59,12 +59,11 @@ class YahtzeeModel:
 
     def roll_dice(self):
         """Roll the dice that have been selected"""
-        # if self._rolls_remaining > 0 and not self._assigned_roll:
-        #         #     for die_index, die in enumerate(self._dice):
-        #         #         if die.selected:
-        #         #             die.roll()
-        #         #     self._rolls_remaining = self._rolls_remaining - 1
-        self._dice = [Die(6) for index in range(5)]
+        if self._rolls_remaining > 0 and not self._assigned_roll:
+            for die_index, die in enumerate(self._dice):
+                if die.selected:
+                    die.roll()
+            self._rolls_remaining = self._rolls_remaining - 1
         return self.get_dice()
 
     def assign_roll(self, box_name):
