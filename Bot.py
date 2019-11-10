@@ -3,13 +3,9 @@ from YahtzeeModel import *
 
 dice = [3,3,6,4,1]
 dice = [5, 1, 4, 3, 3]
-
+dice = [6,6,6,6,6]
 
 def get_straights(dice):
-    sorted_dice = dice[:]
-    sorted_dice.sort()
-    straights = []
-
     counts = [dice.count(value) > 0 for value in range(1, 7)]
     straight_size = []
     occ = 0
@@ -83,7 +79,7 @@ def straight(dice):
                     dice_to_keep.append(False)
         return dice_to_keep
     else:
-        return [False for index in range(5)]
+        return [True for index in range(5)]
 
 
 
@@ -103,13 +99,14 @@ check_dice_upper = {
     'Fives': fives,
     'Sixes': sixes,
     'Small Straight': straight,
-    'Large Straight': straight
+    'Large Straight': straight,
+    'Full House': full_house,
 }
 
 check_dice_lower = {
     '3 of a Kind': three_of_a_kind,
     '4 of a Kind': four_of_a_kind,
-    'Full House': full_house,
+
 
 }
 
