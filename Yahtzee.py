@@ -114,8 +114,9 @@ class Yahtzee:
                 self._view._main_frame.update()
                 time.sleep(1)
             box_to_assign = decide_box(self._model.get_dice(), self._model.current_player.score_card)
+            print(self._model.current_player.player_name, ' : ', box_to_assign, ' : ', self._model.get_dice())
             self._model.assign_roll(box_to_assign)
-            print(self._model.current_player.player_name,' : ', box_to_assign, ' : ', self._model.get_dice())
+
             self._view._main_frame.update()
             self._view.unlock_commands()
             self.next_turn()
