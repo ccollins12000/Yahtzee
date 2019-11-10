@@ -12,7 +12,6 @@ class YahtzeeModel:
         self._rolls_remaining = 0
         self._dice = []
         self._winner = None
-        self._current_score_card = None
         self._assigned_roll = False
         for die_index in range(5):
             self._dice.append(Die())
@@ -24,14 +23,10 @@ class YahtzeeModel:
     @property
     def current_player(self):
         player_index = self._turn % len(self._players)
-        if len(self._players) > 0:
+        if len(self._players) > 0 and self._turn > 0:
             return self._players[player_index]
         else:
             return None
-
-    @property
-    def score_card(self):
-        return self._current_score_card
 
     @property
     def rolls_remaining(self):
@@ -71,18 +66,16 @@ class YahtzeeModel:
         return self.get_dice()
 
     def assign_roll(self, box_name):
+        score_card = self.current_player.score_card
         # only assign roll if the box doesn't already have value and the roll hasn't already been assigned this turn
-        if self._assigned_roll or self._current_score_card.get_box_assigned(box_name) or not self._game_started:
-            return self._current_score_card.get_box_points(box_name)
+        if self._assigned_roll or score_card.get_box_assigned(box_name) or not self._game_started:
+            return score_card.get_box_points(box_name)
         else:
-            self._current_score_card.assign_roll(box_name, self._dice)
+            score_card.assign_roll(box_name, self._dice)
             self._assigned_roll = True
-            return self._current_score_card.get_box_points(box_name)
+            return score_card.get_box_points(box_name)
 
     def setup_turn(self):
-        #get player variables
-        self._current_score_card = self.current_player.score_card
-
         # Setup and roll dice
         self._rolls_remaining = 3
         self._assigned_roll = False

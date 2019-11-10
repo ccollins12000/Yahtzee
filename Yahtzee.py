@@ -24,21 +24,28 @@ class Yahtzee:
             'Sixes': 6
         }
         self._master_tk = tk_master
+        # Main views
         self._view = YahtzeeGameViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
         self._end_game_view = YahtzeeGameViews.GameSummary(self._master_tk)
-        self._model = YahtzeeModel.YahtzeeModel()
         self._collect_players_view = YahtzeeGameViews.PlayersView(tk_master, self.begin_game)
-        self._collect_players_view.show_view()
-        self._score_card_controller = ScoreCardController(self._view._score_card, self._model.score_card)
+
+        # Model
+        self._model = YahtzeeModel.YahtzeeModel()
+
+        # Setup Controllers
         self._player_score_card_controllers = []
         self._dice_controller = DiceController(
             [die_view for die_view in self._view._dice],
             [die for die in self._model._dice]
         )
 
+        # Initialize Game
+        self._collect_players_view.show_view()
+
     def begin_game(self):
         if len(self._collect_players_view.get_players()) > 0:
             self._collect_players_view.main_frame.pack_forget()
+
             # Build Players
             for player in self._collect_players_view.get_players():
                 self._model.add_player(Player(player.player_name, player.avatar_file, player.player_type))
@@ -68,7 +75,7 @@ class Yahtzee:
         for score_box in YahtzeeModel.assign_function_lookup.keys():
             current_value = YahtzeeModel.assign_function_lookup[score_box](self._model.get_dice())
             current_box = score_box
-            if current_value > max_value and not self._model.score_card.get_box_assigned(score_box):
+            if current_value > max_value and not self._model.current_player.score_card.get_box_assigned(score_box):
                 max_value = current_value
                 max_score_box = current_box
 
@@ -78,7 +85,7 @@ class Yahtzee:
     def get_values_not_achieved(self):
         values_needed = []
         for box in self.box_values:
-            if not self._model.score_card.get_box_assigned(box):
+            if not self._model.current_player.score_card.get_box_assigned(box):
                 values_needed.append(self.box_values[box])
         return values_needed
 
@@ -131,7 +138,7 @@ class Yahtzee:
 
     # Updating view/model functions
     def update_view(self):
-        self._score_card_controller = ScoreCardController(self._view._score_card, self._model.score_card)
+        self._score_card_controller = ScoreCardController(self._view._score_card, self._model.current_player.score_card)
         self._score_card_controller.update_view()
         self._dice_controller.update_dice()
         self._view.player_name = self._model.current_player.player_name
