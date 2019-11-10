@@ -240,7 +240,6 @@ class ScoreCard:
         else:
             self.get_box(box_name).assign_points(dice)
         self.update_points()
-        print(self._grandTotal)
 
     def get_box_points(self, box_name):
         box = self.get_box(box_name)
