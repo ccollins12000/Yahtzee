@@ -2,6 +2,8 @@ from ScoreCardModel import *
 from YahtzeeModel import *
 
 dice = [3,3,6,4,1]
+dice = [5, 1, 4, 3, 3]
+
 
 def get_straights(dice):
     sorted_dice = dice[:]
@@ -9,7 +11,6 @@ def get_straights(dice):
     straights = []
 
     counts = [dice.count(value) > 0 for value in range(1, 7)]
-    print(counts)
     straight_size = []
     occ = 0
     for index in range(len(counts)):
@@ -85,6 +86,7 @@ def straight(dice):
         return [False for index in range(5)]
 
 
+
 def full_house(dice):
     occurence = [dice[0:die_index + 1].count(die) for die_index, die in enumerate(dice)]
     counts = [dice.count(die) for die in dice]
@@ -99,15 +101,16 @@ check_dice_upper = {
     'Threes': threes,
     'Fours':  fours,
     'Fives': fives,
-    'Sixes': sixes
+    'Sixes': sixes,
+    'Small Straight': straight,
+    'Large Straight': straight
 }
 
 check_dice_lower = {
     '3 of a Kind': three_of_a_kind,
     '4 of a Kind': four_of_a_kind,
     'Full House': full_house,
-    'Small Straight': straight,
-    'Large Straight': straight
+
 }
 
 check_dice_extras = {
