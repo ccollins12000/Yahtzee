@@ -74,30 +74,33 @@ check_dice_lower = {
     '4 of a Kind': four_of_a_kind,
     'Full House': full_house,
     'Small Straight': straight,
-    'Large Straight': straight,
+    'Large Straight': straight
+}
+
+check_dice_extras = {
     'Yahtzee': yahtzee,
     'Chance': chance
 }
 
-
 def decide_roll(dice, score_card):
     checks = []
     dice_counts = []
-    boxes = []
     for box in check_dice_upper:
         if not score_card.get_box_assigned(box):
-            boxes.append(box)
             checks.append(check_dice_upper[box](dice))
             dice_counts = [sum(dice) for dice in checks]
 
     if len(dice_counts) == 0:
         for box in check_dice_lower:
-            boxes.append(box)
             checks.append(check_dice_lower[box](dice))
             dice_counts = [sum(dice) for dice in checks]
 
+    if len(dice_counts) == 0:
+        for box in check_dice_extras:
+            checks.append(check_dice_extras[box](dice))
+            dice_counts = [sum(dice) for dice in checks]
+
     rolls = max(checks, key=sum)
-    box = boxes[checks.index(rolls)]
 
     return max(checks, key=sum)
 
@@ -106,11 +109,20 @@ def decide_box(dice, score_card):
     max_value = -1
     max_score_box = ''
 
-    for score_box in assign_function_lookup.keys():
-        current_value = assign_function_lookup[score_box](dice)
-        current_box = score_box
-        if current_value > max_value and not score_card.get_box_assigned(score_box):
-            max_value = current_value
-            max_score_box = current_box
+    if of_a_kind_size(dice) != 5:
+        for score_box in assign_function_lookup.keys():
+            current_value = assign_function_lookup[score_box](dice)
+            current_box = score_box
+            if current_value > max_value and not score_card.get_box_assigned(score_box):
+                max_value = current_value
+                max_score_box = current_box
+            if max_value > 6 and max_score_box in check_dice_upper:
+                break
+            elif max_value > 2 and max_score_box == 'Aces':
+                break
+            elif max_value > 4 and max_score_box == 'Twos':
+                break
+    else:
+        max_score_box = "Yahtzee"
 
     return max_score_box
