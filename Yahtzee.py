@@ -1,9 +1,10 @@
 from tkinter import *
 import YahtzeeGameViews
-import YahtzeeModel
+from YahtzeeModel import *
 from PlayerModel import *
 from Controllers import *
 import time
+from Bot import *
 
 
 class Yahtzee:
@@ -30,7 +31,7 @@ class Yahtzee:
         self._collect_players_view = YahtzeeGameViews.PlayersView(tk_master, self.begin_game)
 
         # Model
-        self._model = YahtzeeModel.YahtzeeModel()
+        self._model = YahtzeeModel()
 
         # Setup Controllers
         self._player_score_card_controllers = []
@@ -99,17 +100,22 @@ class Yahtzee:
             # Account for straights
             # Account for full house
             # Account for boxes already assigned
-            while self._model.rolls_remaining > 0 and YahtzeeModel.of_a_kind_size(self._model.get_dice()) < 5:
+            while self._model.rolls_remaining > 0 and of_a_kind_size(self._model.get_dice()) < 5:
                 dice = self._model.get_dice()
-                value_going_for = max(dice, key=dice.count)
+                rolls = decide_roll(dice, self._model.current_player.score_card)
+                # value_going_for = max(dice, key=dice.count)
+                # for die_index, die in enumerate(dice):
+                #     self._view.update_die_selected(die_index, not die == value_going_for)
                 for die_index, die in enumerate(dice):
-                    self._view.update_die_selected(die_index, not die == value_going_for)
+                    self._view.update_die_selected(die_index, not rolls[die_index])
                 self._view._main_frame.update()
                 time.sleep(1)
                 self.roll_dice()
                 self._view._main_frame.update()
                 time.sleep(1)
-            self.assign_best_score_box()
+            box_to_assign = decide_box(self._model.get_dice(), self._model.current_player.score_card)
+            self._model.assign_roll(box_to_assign)
+            print(self._model.current_player.player_name,' : ', box_to_assign, ' : ', self._model.get_dice())
             self._view._main_frame.update()
             self._view.unlock_commands()
             self.next_turn()
@@ -117,13 +123,13 @@ class Yahtzee:
     # Action Functions
     def next_turn(self):
         self._model.next_turn()
-        self.update_view()  # careful with removing this the model selects all the dice for re-roll when turn ends.
         if self._model.game_over:
             self._view.hide_view()
             for score_card in self._player_score_card_controllers:
                 score_card.update_view()
             self._end_game_view.show_view()
         else:
+            self.update_view()  # careful with removing this the model selects all the dice for re-roll when turn ends.
             self.check_take_ai_turn()
 
     def roll_dice(self):
