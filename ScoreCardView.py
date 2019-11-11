@@ -1,3 +1,5 @@
+
+
 from tkinter import *
 from tkinter import ttk as tk
 
@@ -27,12 +29,14 @@ class ScoreBoxView:
             assignment_var (tk StringVar): The variable where the selected score box will be stored. Passed from the larger score card view object.
         """
         self._name = name
-        self.points_view = tk.Entry(master, width=3, state='disabled')
-        if can_assign:
-            self.selector = tk.Radiobutton(master, variable=assignment_var, text=name, width=11, value=name)
-        else:
-            self.selector = tk.Label(master, text=name, width=13)
+        self._image = PhotoImage(file="Score_Box_Images/" + name + ".png")
 
+        self.points_view = tk.Entry(master, width=3, state='disabled')
+        # if can_assign:
+        #     self.selector = tk.Radiobutton(master, variable=assignment_var, text=name, width=11, value=name)
+        # else:
+        #     self.selector = tk.Label(master, text=name, width=13)
+        self.selector = tk.Label(master, image=self._image)
     @property
     def points(self):
         """Get or set the points displayed in the score box"""
