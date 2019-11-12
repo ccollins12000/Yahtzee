@@ -1,4 +1,11 @@
+"""Score Card Views
 
+This module contains all of the objects for displaying a Yahtzee score card
+
+Attributes:
+    score_box_view_types (list):
+        A dictionary of all the possible assignable score card boxes
+"""
 
 from tkinter import *
 from tkinter import ttk as tk
