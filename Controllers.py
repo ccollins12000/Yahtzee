@@ -32,7 +32,6 @@ class CurrentScoreCardController(ScoreCardController):
 
 
     def update_view(self):
-        print(self.yahtzee.current_player.player_name)
         self._model = self.yahtzee.current_player.score_card
         super().update_view()
 
