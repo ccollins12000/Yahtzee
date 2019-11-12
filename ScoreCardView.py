@@ -12,55 +12,61 @@ class ScoreBoxView:
 
     Attributes:
         name (str): The name of the score box
-        frame (tk.frame): The tk frame object containing the score box UI elements
-        points (int): The number of points in the scorebox
-        enabled (bool): Whether or not the score box can be selected
     """
 
     def __init__(self, master, name, can_assign: bool, assignment_var: StringVar):
         """
         The constructor for ScoreBoxView
 
-        Parameters:
-            master (tk object): The tk master object to place the score box UI into
-            name (str): The name of the score box, also displays as a text label next to the box on the UI. Should be one of the following values:
-            'Aces', 'Twos', 'Threes', 'Fours', 'Fives', 'Sixes', '3 of a Kind', '4 of a Kind', 'Full House', 'Small Straight', 'Large Straight', 'Yahtzee', 'Chance'
-            can_assign (bool): Whether a dice roll can be assigned to the score box (For Example: the grand total score box should have False passed here)
-            assignment_var (tk StringVar): The variable where the selected score box will be stored. Passed from the larger score card view object.
+        Notes:
+            The score box label and points box must manaully be grid into the master score card object to display
+
+        Args:
+            points_view (:obj:): The Tkinter entry object containing the points
+            selector (:obj:): The label object containing the picture/text for the scorebox
         """
         self._name = name
-        self._image = PhotoImage(file="Score_Box_Images/" + name + ".png")
-        #self._image2 = PhotoImage(file="Score_Box_Images/test.png")
+        self._enabled = False
         self._can_assign = can_assign
         self.points_view = tk.Entry(master, width=3, state='disabled')
         self._assignment_var = assignment_var
-
-        #self.selector = Radiobutton(master, indicatoron = False, variable=assignment_var, image=self._image, value=name)
-        # if can_assign:
-        #     self.selector = tk.Radiobutton(master, variable=assignment_var, text=name, width=11, value=name)
-        # else:
-        #     self.selector = tk.Label(master, text=name, width=13)
+        self._image = PhotoImage(file="Score_Box_Images/" + name + ".png")
         self.selector = tk.Label(master, image=self._image, borderwidth=3, relief=RAISED, background = 'BLACK')
         self.selector.bind("<Button-1>", self.select)
 
     def select(self, event):
+        """Helper function for when the image gets clicked. Sets the selected box for the score card when the box is clicked.
+
+        Note:
+            Do not utilize this method outside of the class.  The score box image has this function bound via the tkinter button1 event.
+
+        Args:
+            event: tkinter event. When the scorebox image is clicked
+        """
         self._assignment_var.set(self._name)
 
     def set_image(self, selected):
-        if selected:
+        """Helper function for when the image gets clicked.  Sets the image to show whether the box is selected or not.
+
+        Note:
+            Do not utilize this method outside of the class
+
+        Args:
+            selected: Whether or not the box is selected
+        """
+        if selected and self._can_assign and self.enabled:
             self.selector.configure(background='RED', relief=SUNKEN)
-            #self._image = PhotoImage(file="Score_Box_Images/test.png")
         else:
             self.selector.configure(background='BLACK', relief=RAISED)
-        #self.selector.configure(image=self._image)
 
     @property
     def assignable(self):
+        """bool: Get whether or not points can be assigned by the player to the box"""
         return self._can_assign
 
     @property
     def points(self):
-        """Get or set the points displayed in the score box"""
+        """int: Get or set the points displayed in the score box"""
         return self.points_view.get()
 
     @points.setter
@@ -72,19 +78,16 @@ class ScoreBoxView:
 
     @property
     def enabled(self):
-        """Enabled or disable the score box from being able to be selected for assigning a dice roll"""
-        return self.selector.state()
+        """bool: Enabled or disable the score box from being able to be selected for assigning a dice roll"""
+        return self._enabled
 
     @enabled.setter
     def enabled(self, enable):
-        if enable:
-            self.selector.configure(state=NORMAL)
-        else:
-            self.selector.configure(state=DISABLED)
+        self._enabled = enable
 
     @property
     def name(self):
-        """Get the name of the score box"""
+        """str: Get the name of the score box"""
         return self._name
 
 
@@ -134,15 +137,15 @@ class ScoreCardView:
         for box_setup in box_setup_instructions:
             assignable = box_setup_instructions[box_setup]['Can Assign']
             self._score_boxes[box_setup] = ScoreBoxView(self.mainFrame, box_setup, assignable, self._assign_selection)
-            #self._score_boxes[box_setup].selector.bind("<Button-1>", self.check_selection)
-        rw = 0
 
         # pack each score box into the frame
+        rw = 0
         for scoreBox in self._score_boxes:
             self._score_boxes[scoreBox].points_view.grid(row=rw, column=1, sticky=NSEW)
             self._score_boxes[scoreBox].selector.grid(row=rw, column=0, sticky=NSEW)
             rw += 1
 
+        # setup when the variable containing the scorebox selection is changed update the photos to reflect which box is selected
         self._assign_selection.trace('w', self.check_selection)
 
     def check_selection(self, *args):
@@ -154,7 +157,7 @@ class ScoreCardView:
 
     @property
     def selection(self):
-        """Get or set the selected score box on the score card.  Pass an empty string to deselect all boxes."""
+        """str: Get or set the selected score box on the score card.  Pass an empty string to deselect all boxes."""
         return self._assign_selection.get()
 
     @selection.setter
@@ -165,8 +168,8 @@ class ScoreCardView:
         """
         Update the number of points displayed in a score box on the score card UI
 
-        Parameters:
-            box_name (tk str): The name of the box to update the points in
+        Args:
+            box_name (str): The name of the box to update the points in
             points (bool): the number of points to place in the score box UI
         """
         self._score_boxes[box_name].points = points
@@ -175,8 +178,8 @@ class ScoreCardView:
         """
         Update whether or not a score box on the score card UI can be selected
 
-        Parameters:
-            box_name (tk str): The name of the box to disable/enable
+        Args:
+            box_name (str): The name of the box to disable/enable
             enabled (bool): Whether or not the box can be selected
         """
         self._score_boxes[box_name].enabled = enabled
