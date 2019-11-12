@@ -67,29 +67,6 @@ class Yahtzee:
     def unlock_view(self):
         self._view.unlock_commands()
 
-    # AI FUNCTIONS
-
-    def assign_best_score_box(self):
-        max_value = -1
-        max_score_box = ''
-
-        for score_box in YahtzeeModel.assign_function_lookup.keys():
-            current_value = YahtzeeModel.assign_function_lookup[score_box](self._model.get_dice())
-            current_box = score_box
-            if current_value > max_value and not self._model.current_player.score_card.get_box_assigned(score_box):
-                max_value = current_value
-                max_score_box = current_box
-
-        self._model.assign_roll(max_score_box)
-        self.update_view()
-
-    def get_values_not_achieved(self):
-        values_needed = []
-        for box in self.box_values:
-            if not self._model.current_player.score_card.get_box_assigned(box):
-                values_needed.append(self.box_values[box])
-        return values_needed
-
     def check_take_ai_turn(self):
         if self._model.current_player.player_type == 'Computer':
             self._view.lock_commands()

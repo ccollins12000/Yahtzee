@@ -24,7 +24,6 @@ class ScoreCardController:
                 self._view.assign_points(view_name, '')
                 self._view.box_enabled(view_name, not model_assigned)
 
-
 class DiceController:
     def __init__(self, dice_views, dice_models):
         self._dice_views = dice_views
