@@ -98,7 +98,7 @@ class YahtzeeView:
         end_turn_function (function): the function that is executed when the end turn button is cliecked
     """
     def __init__(self, tk_master, roll_function, assign_function, end_turn_function):
-        self._player_name = StringVar()
+
 
         self._main_frame = tk.Frame(tk_master)
         master = self._main_frame
@@ -140,8 +140,13 @@ class YahtzeeView:
         self._game_stats_frame = tk.Frame(master)
         self._game_stats_frame.grid(row=2, column=1, rowspan=2, columnspan=2)
         self._can_roll = True
-        self._lbl_player_name = tk.Label(self._game_stats_frame, textvariable= self._player_name)
-        self._lbl_player_name.grid(row=0,column=0, sticky=N + S + E + W)
+        self._player_name = StringVar()
+        #self._lbl_player_name = tk.Label(self._game_stats_frame, textvariable= self._player_name)
+        #self._lbl_player_name.grid(row=0,column=0, sticky=N + S + E + W)
+
+        self._instructions = StringVar()
+        self._lbl_instructions = tk.Label(self._game_stats_frame, textvariable= self._instructions)
+        self._lbl_instructions.grid(row=0, column=0, sticky=N + S + E + W)
 
     def lock_commands(self):
         self._btn_assign_roll.config(state=DISABLED)
@@ -152,6 +157,14 @@ class YahtzeeView:
         self._btn_assign_roll.config(state=NORMAL)
         self._btn_end_turn.config(state=NORMAL)
         self._btn_roll.config(state=NORMAL)
+
+    @property
+    def instructions(self):
+        return self._instructions.get()
+
+    @instructions.setter
+    def instructions(self, value):
+        self._instructions.set(value)
 
     @property
     def player_name(self):

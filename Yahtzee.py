@@ -148,7 +148,7 @@ class Yahtzee:
         self._score_card_controller = ScoreCardController(self._view._score_card, self._model.current_player.score_card)
         self._score_card_controller.update_view()
         self._dice_controller.update_dice()
-        self._view.player_name = self._model.current_player.player_name
+        self._view.instructions = self._model.instructions
         self._view.rolls_remaining = self._model.rolls_remaining
         self._dice_controller.update_dice_select() # careful with removing this the model selects all the dice for re-roll when turn ends.
         self._view.avatar_image = self._model.current_player.avatar_file
