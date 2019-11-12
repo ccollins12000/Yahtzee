@@ -30,13 +30,34 @@ class ScoreBoxView:
         """
         self._name = name
         self._image = PhotoImage(file="Score_Box_Images/" + name + ".png")
-
+        #self._image2 = PhotoImage(file="Score_Box_Images/test.png")
+        self._can_assign = can_assign
         self.points_view = tk.Entry(master, width=3, state='disabled')
+        self._assignment_var = assignment_var
+
+        #self.selector = Radiobutton(master, indicatoron = False, variable=assignment_var, image=self._image, value=name)
         # if can_assign:
         #     self.selector = tk.Radiobutton(master, variable=assignment_var, text=name, width=11, value=name)
         # else:
         #     self.selector = tk.Label(master, text=name, width=13)
-        self.selector = tk.Label(master, image=self._image)
+        self.selector = tk.Label(master, image=self._image, borderwidth=3, relief=RAISED, background = 'BLACK')
+        self.selector.bind("<Button-1>", self.select)
+
+    def select(self, event):
+        self._assignment_var.set(self._name)
+
+    def set_image(self, selected):
+        if selected:
+            self.selector.configure(background='RED', relief=SUNKEN)
+            #self._image = PhotoImage(file="Score_Box_Images/test.png")
+        else:
+            self.selector.configure(background='BLACK', relief=RAISED)
+        #self.selector.configure(image=self._image)
+
+    @property
+    def assignable(self):
+        return self._can_assign
+
     @property
     def points(self):
         """Get or set the points displayed in the score box"""
@@ -113,6 +134,7 @@ class ScoreCardView:
         for box_setup in box_setup_instructions:
             assignable = box_setup_instructions[box_setup]['Can Assign']
             self._score_boxes[box_setup] = ScoreBoxView(self.mainFrame, box_setup, assignable, self._assign_selection)
+            #self._score_boxes[box_setup].selector.bind("<Button-1>", self.check_selection)
         rw = 0
 
         # pack each score box into the frame
@@ -120,6 +142,15 @@ class ScoreCardView:
             self._score_boxes[scoreBox].points_view.grid(row=rw, column=1, sticky=NSEW)
             self._score_boxes[scoreBox].selector.grid(row=rw, column=0, sticky=NSEW)
             rw += 1
+
+        self._assign_selection.trace('w', self.check_selection)
+
+    def check_selection(self, *args):
+        for box in self._score_boxes:
+            if self.selection == box:
+                self._score_boxes[box].set_image(True)
+            else:
+                self._score_boxes[box].set_image(False)
 
     @property
     def selection(self):
