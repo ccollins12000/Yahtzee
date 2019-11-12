@@ -124,7 +124,7 @@ class YahtzeeModel:
             self._rolls_remaining = self._rolls_remaining - 1
         else:
             if self._rolls_remaining < 1 and not self._assigned_roll:
-                self._instructions = "You already used all your rolls!  Accept your fate and assign your roll."
+                self._instructions = "You already used all your rolls!  Accept your fate and assign your roll to a score box."
             elif self._assigned_roll:
                 self._instructions = "You already assigned your roll. You must click next turn so other people get a chance to go!"
         return self.get_dice()
@@ -149,7 +149,7 @@ class YahtzeeModel:
             if self._assigned_roll:
                 self._instructions = "You already assigned this roll! You must click next turn to hand the dice to the next player."
             elif score_card.get_box_assigned(box_name):
-                self._instructions = "Too Late! You already assigned a roll to that box.  Choose a different box."
+                self._instructions = "Too Late! You already assigned a roll to that box. Choose a different box."
             return score_card.get_box_points(box_name)
         else:
             score_card.assign_roll(box_name, self._dice)
@@ -169,7 +169,7 @@ class YahtzeeModel:
             die.selected = True
         self.roll_dice()
         self._instructions = self.current_player.player_name + ''' may now go. 
-        Select dice to roll by clicking them above. Once you have made you selections you can roll the dice. 
+        Select dice to roll by clicking them above. Once you have made your selections you can roll the dice. 
         If you are happy with dice go ahead and assign the roll to a score box on the left by clicking the score box and clicking assign roll.
         '''
 

@@ -55,7 +55,7 @@ class ScoreBoxView:
     def set_image(self, selected):
         """Helper function for when the image gets clicked.  Sets the image to show whether the box is selected or not.
 
-        Note:
+        Notes:
             Do not utilize this method outside of the class
 
         Args:
