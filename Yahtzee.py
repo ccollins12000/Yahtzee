@@ -56,6 +56,8 @@ class Yahtzee:
 
             # start game
             self._model.start_game()
+
+            #Update Views
             self._view.show_view()
             self._master_tk.title("Play Yahtzee!")
             self.update_view()
@@ -102,16 +104,20 @@ class Yahtzee:
     # Action Functions
     def next_turn(self):
         self._model.next_turn()
+        #Check if game is over
         if self._model.game_over:
+            #Show final game stats
             self._view.hide_view()
             for score_card in self._player_score_card_controllers:
                 score_card.update_view()
             self._end_game_view.show_view()
         else:
+            # Update View and Pass to Bot if applicable
             self.update_view()  # careful with removing this the model selects all the dice for re-roll when turn ends.
             self.check_take_ai_turn()
 
     def roll_dice(self):
+        # pass the selected dice to the model and roll them
         self._dice_controller.update_dice_select()
         self._model.roll_dice()
         self.update_view()
