@@ -34,6 +34,7 @@ class Yahtzee:
         self._model = YahtzeeModel()
 
         # Setup Controllers
+        self._score_card_controller = CurrentScoreCardController(self._view._score_card, self._model)
         self._player_score_card_controllers = []
         self._dice_controller = DiceController(
             [die_view for die_view in self._view._dice],
@@ -122,7 +123,6 @@ class Yahtzee:
 
     # Updating view/model functions
     def update_view(self):
-        self._score_card_controller = ScoreCardController(self._view._score_card, self._model.current_player.score_card)
         self._score_card_controller.update_view()
         self._dice_controller.update_dice()
         self._view.instructions = self._model.instructions

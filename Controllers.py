@@ -1,4 +1,4 @@
-class ScoreCardController:
+class ScoreCardController(object):
     def __init__(self, view, model):
         self._view = view
         self._model = model
@@ -23,6 +23,19 @@ class ScoreCardController:
             else:
                 self._view.assign_points(view_name, '')
                 self._view.box_enabled(view_name, not model_assigned)
+
+
+class CurrentScoreCardController(ScoreCardController):
+    def __init__(self, view, yahtzee_model):
+        super().__init__(view, None)
+        self.yahtzee = yahtzee_model
+
+
+    def update_view(self):
+        print(self.yahtzee.current_player.player_name)
+        self._model = self.yahtzee.current_player.score_card
+        super().update_view()
+
 
 class DiceController:
     def __init__(self, dice_views, dice_models):
