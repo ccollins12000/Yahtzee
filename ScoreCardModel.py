@@ -1,22 +1,66 @@
+
+
+
 def dice_roll_count(dice_list, value_to_count):
+    """Count the number of dice with a certain roll
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+        value_to_count (int): The value to count the occurence of in the dice list
+
+    Returns:
+        int: Returns the number of times the value occurs in the list of dice
+    """
     return dice_list.count(value_to_count)
 
 
 def check_yahtzee(dice_list):
+    """Does the list of dice contain a Yahtzee
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        bool: returns whether or not the roll is a Yahtzee
+    """
     roll_counts = [dice_list.count(value) for value in range(1, 7)]
     return 5 in roll_counts
 
 
 def check_full_house(dice_list):
+    """Is the roll a full house
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        bool: Returns whether or not the dice list contains a full house
+    """
     roll_counts = [dice_list.count(value) for value in range(1, 7)]
     return 2 in roll_counts and 3 in roll_counts
 
 
 def of_a_kind_size(dice_list):
+    """Returns the largest of a kind size contained in the dice
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the largest of a kind size
+    """
     return max([dice_list.count(value) for value in range(1,7)])
 
 
 def straight_size(dice_list):
+    """Calculate how long the longest straight in the dice is
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the size of the largest striaght in the dice
+    """
     # generates list of count dice values 1-6 in order.  Any count of 0 breaks the straight
     roll_counts = [str(dice_list.count(value)) for value in range(1, 7)]
     return len(max(''.join(roll_counts).split('0'), key=len))
@@ -25,30 +69,86 @@ def straight_size(dice_list):
 
 
 def aces_points(dice_list):
+    """Calculate the number of points based on aces in the dice
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the number of points for aces
+    """
     return dice_list.count(1) * 1
 
 
 def twos_points(dice_list):
+    """Calculate the number of points based on twos in the dice
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the number of points for twos
+    """
     return dice_list.count(2) * 2
 
 
 def threes_points(dice_list):
+    """Calculate the number of points based on threes in the dice
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the number of points for threes
+    """
     return dice_list.count(3) * 3
 
 
 def fours_points(dice_list):
+    """Calculate the number of points based on fours in the dice
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the number of points for fours
+    """
     return dice_list.count(4) * 4
 
 
 def fives_points(dice_list):
+    """Calculate the number of points based on fives in the dice
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the number of points for fives
+    """
     return dice_list.count(5)* 5
 
 
 def sixes_points(dice_list):
+    """Calculate the number of points based on sixes in the dice
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the number of points for sixes
+    """
     return dice_list.count(6) * 6
 
 
 def three_of_a_kind_points(dice_list):
+    """Calculate the number of points based on a three of a kind scorebox
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the number of points for a three of a kind score box
+    """
     if of_a_kind_size(dice_list) >= 3:
         return sum(dice_list)
     else:
