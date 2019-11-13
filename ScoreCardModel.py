@@ -156,6 +156,14 @@ def three_of_a_kind_points(dice_list):
 
 
 def four_of_a_kind_points(dice_list):
+    """Calculate the number of points based on a four of a kind scorebox
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the number of points for a four of a kind score box
+    """
     if of_a_kind_size(dice_list) >= 4:
         return sum(dice_list)
     else:
@@ -163,6 +171,14 @@ def four_of_a_kind_points(dice_list):
 
 
 def full_house_points(dice_list):
+    """Calculate the number of points based on a full house scorebox
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the number of points for a full house score box
+    """
     if check_full_house(dice_list) or check_yahtzee(dice_list):
         return 25
     else:
