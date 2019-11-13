@@ -1,3 +1,6 @@
+"""This module contains code for a player view
+
+"""
 from tkinter import *
 from tkinter import ttk as tk
 
@@ -5,13 +8,20 @@ from tkinter import ttk as tk
 class PlayerView:
     """
     A player picker view
+
+    Attributes:
+        main_frame (obj): the tkinter frame object that contains the player view
     """
     def __init__(self, master, avatar_file, default_name):
-        """
-        The constructor function for a player picker view
+        """The player view constructor
 
-        :param master: the tk master object
-        :param master: the file name of the avatar
+        Note:
+            The player view must be manually shown view the main frame attribute
+
+        Args:
+            master (obj): The Tkinter master object that contains the player view
+            avatar_file (str): The file path to the avatar picture file
+            default_name (str): The default name for the player
         """
         self._tk_master = master
         self.main_frame = tk.Frame(self._tk_master)
@@ -44,7 +54,6 @@ class PlayerView:
     def added(self):
         """
         Get whether or not the player has been added to the game
-        :return: whether or not the player was added to the game
         """
         return self._added
 
@@ -52,7 +61,6 @@ class PlayerView:
     def player_type(self):
         """
         Get whether or not the player is a Human or computer
-        :return: whether or not the player is a Human or computer
         """
         return self._player_type.get()
 
@@ -62,12 +70,14 @@ class PlayerView:
 
     @property
     def avatar_file(self):
+        """
+        Get the avatar file path
+        """
         return self._avatar_file
 
     def toggle_player(self):
         """
         Add/Remove the player to the game
-        :return: None
         """
         if self._added:
             self._added = False
