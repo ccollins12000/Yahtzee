@@ -278,9 +278,17 @@ score_box_value_lookup = {
 }
 
 class ScoreBox:
-    """
+    """A single score box object for implementation in a Yahtzee Score Card
+
     """
     def __init__(self, box_type):
+        """
+        The constructor for a score box
+
+        Args:
+            box_type (str): The type of score box.  Utilize one of the following values:
+            Aces, Twos, Threes, Fours, Fives, Sixes, 3 of a Kind, 4 of a Kind, Small Straight, Large Straight, Full House, Yahtzee, Chance
+        """
         self._points = 0
         self._assigned = False
         self._name = box_type
@@ -288,25 +296,32 @@ class ScoreBox:
 
     @property
     def name(self):
-        return self._name
-
-    def getname(self):
+        """str: return the name of the scorebox"""
         return self._name
 
     @property
     def points(self):
+        """int: return the points contained in the score box"""
         return self._points
 
     @property
     def assigned(self):
+        """bool: Return whether or not the score box already has a roll assigned."""
         return self._assigned
 
     def assign_points(self, dice):
+        """Assigns a dice roll to the score box and calculates the points
+
+        Args:
+            dice (obj): A List of die objects
+
+        """
         if not self.assigned:
             self._assigned = True
             self._points = self._calculate_points(dice)
 
     def __str__(self):
+        """str: Print a description of the score box"""
         return self._name + ': ' + str(self._points)
 
 
