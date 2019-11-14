@@ -326,7 +326,14 @@ class ScoreBox:
 
 
 class ScoreCard:
+    """A Yahtzee score card
+
+    """
     def __init__(self):
+        """
+        The constructor for a Yahtzee score card
+
+        """
         self._yahtzee_count = 0
         self._aces = ScoreBox('Aces')
         self._twos = ScoreBox('Twos')
@@ -353,10 +360,18 @@ class ScoreCard:
                        ]
 
     def print_points(self, box_index):
+        """Prints the points of a score box on the score card at the specified index
+
+        Args:
+            box_index (int): The index of the score box
+
+        """
         return str(self._boxes[box_index])
 
     def update_points(self):
+        """Recalculates the totals on the score card.
 
+        """
         #Calculate Upper Section
         total = 0
         for box in self._upper_section:
@@ -383,26 +398,46 @@ class ScoreCard:
 
     @property
     def total_points(self):
+        """int: Get the total points"""
         return self._grandTotal
 
     @property
     def upper_total_points(self):
+        """int: Get the total points in the upper section"""
         return self._upperTotal
 
     @property
     def bonus_points(self):
+        """int: Get the bonus points"""
         return self._bonus
 
     @property
     def lower_total_points(self):
+        """int: Get the total points in the lower section"""
         return self._lowerTotal
 
     def get_box(self, box_name):
+        """Gets the score box object with the given name
+
+        Args:
+            box_name (str): The name of the box to get.  One of the following values:
+            Aces, Twos, Threes, Fours, Fives, Sixes, 3 of a Kind, 4 of a Kind, Small Straight, Large Straight, Full House, Yahtzee, Chance
+
+        Returns:
+            obj: The score box with the given name
+        """
         for box in self._boxes:
             if box.name == box_name:
                 return box
 
     def assign_roll(self, box_name, dice):
+        """Assign a dice roll to a give score box and calculate the points
+
+        Args:
+            box_name (str): The name of the box to get.  One of the following values:
+            Aces, Twos, Threes, Fours, Fives, Sixes, 3 of a Kind, 4 of a Kind, Small Straight, Large Straight, Full House, Yahtzee, Chance
+            dice (obj): A list of dice objects
+        """
         if check_yahtzee(dice):
             self._yahtzee_count = self._yahtzee_count + 1
 
@@ -415,6 +450,15 @@ class ScoreCard:
         self.update_points()
 
     def get_box_points(self, box_name):
+        """Gets the points in the given score box
+
+        Args:
+            box_name (str): The name of the box to get.  One of the following values:
+            Aces, Twos, Threes, Fours, Fives, Sixes, 3 of a Kind, 4 of a Kind, Small Straight, Large Straight, Full House, Yahtzee, Chance, Upper Total, Bonus, Lower Total, Grand Total
+
+        Returns:
+            The current point value in the box
+        """
         box = self.get_box(box_name)
         if box is None:
             if box_name == 'Upper Total':
@@ -429,6 +473,15 @@ class ScoreCard:
             return box.points
 
     def get_box_assigned(self, box_name):
+        """Gets whether or not a given box already has a roll assigned
+
+        Args:
+            box_name (str): The name of the box to get.  One of the following values:
+            Aces, Twos, Threes, Fours, Fives, Sixes, 3 of a Kind, 4 of a Kind, Small Straight, Large Straight, Full House, Yahtzee, Chance, Upper Total, Bonus, Lower Total, Grand Total
+
+        Returns:
+            bool: Whether or not the box already has a value assigned
+        """
         box = self.get_box(box_name)
         if box is None:
             if box_name == 'Upper Total':
@@ -443,20 +496,26 @@ class ScoreCard:
             return box.assigned
 
     def __lt__(self, other):
+        """bool: Whether the total points are less than a integer"""
         return self._grandTotal < other
 
     def __le__(self, other):
+        """bool: Whether or not the total points are less than or equal than an integer"""
         return self._grandTotal <= other
 
     def __eq__(self, other):
+        """bool: Whether or not the total points are equal to an integer"""
         return self._grandTotal == other
 
     def __ne__(self, other):
+        """bool: Whether or not the total points are not equal to an integer"""
         return self._grandTotal != other
 
     def __ge__(self, other):
+        """bool: Whether or not the total points are greater than or equal than an integer"""
         return self._grandTotal >= other
 
     def __gt__(self, other):
+        """bool: Whether or not the total points are greater than than an integer"""
         return self._grandTotal > other
 
