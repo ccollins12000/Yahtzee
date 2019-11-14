@@ -1,3 +1,8 @@
+"""This module contains the main windows displayed while initializing and playing a Yahtzee game
+
+"""
+
+
 from tkinter import *
 from tkinter import ttk as tk
 from ScoreCardView import *
@@ -6,7 +11,20 @@ from DieView import *
 
 
 class GameSummary:
+    """
+    This is a class for displaying the results of the game
+    """
     def __init__(self, master):
+        """
+        The constructor for ScoreBoxView
+
+        Notes:
+            Players must be added to the view throw the add player method.
+            Show view must be called to display the window
+
+        Args:
+            master (:obj:): The master tk window the view is displayed into
+        """
         self._tk_master = master
         self._main_frame = tk.Frame(self._tk_master)
         self._players = []
@@ -16,6 +34,13 @@ class GameSummary:
         self._score_cards = []
 
     def add_player(self, avatar_file, player_name):
+        """
+        Adds players to the view
+
+        Args:
+            avatar_file (str:): The path to the avatar file
+            player_name (str:) The name of the player
+        """
         self._images.append(PhotoImage(file=avatar_file))
         score_frame = tk.Frame(self._main_frame)
         self._players.append(
@@ -33,19 +58,29 @@ class GameSummary:
         player["Score Card Frame"].grid(row=2, column=player_index, sticky=N + S + E + W)
 
     def show_view(self):
+        """Shows the view in the main tk window"""
         self._main_frame.pack()
 
     def hide_view(self):
+        """Hides the view in the main tk window"""
         self._main_frame.pack_forget()
 
 
 class PlayersView:
+    """
+    A class object that is a UI for entering all the player names
+
+    Attributes:
+        players (str): All the player views
+        main_frame (obj): The main tk window the view is displayed into
+    """
     def __init__(self, master, start_game_function):
         """
-        A class object that is a UI for entering all the player names
+        The constructor for the players view
 
-        :param master: the tk master object that the player entry form is grid into
-        :param start_game_function: the function that is executed when the start game button is clicked
+        Args:
+            master (obj): the tk master object that the player entry form is grid into
+            start_game_function (function) : the function that is executed when the start game button is clicked
         """
         # initialize objects
         master.title('Enter Player Names: ')
@@ -64,7 +99,7 @@ class PlayersView:
 
     def get_players(self):
         """
-        :return: all the players in the game
+        obj: Gets all the player views for the added players in the game
         """
         all_players = []
         for player in self.players:
@@ -75,14 +110,12 @@ class PlayersView:
     def show_view(self):
         """
         Packs the objects into the master TK object
-        :return: None
         """
         self.main_frame.pack()
 
     def hide_view(self):
         """
         Hides the objects into the master TK object
-        :return: None
         """
         self.main_frame.pack_forget()
 
@@ -90,15 +123,17 @@ class PlayersView:
 class YahtzeeView:
     """
     This is a class for showing a yahtzee game window
-
-    Parameters:
-        master (tkinter master view object): the tkinter master view object or window the yahtzee game will be packed into
-        roll_function (function): the function that is run when the roll sdice button is clicked
-        assign_function (function): the function that is executed when the assign roll button is clicked
-        end_turn_function (function): the function that is executed when the end turn button is cliecked
     """
     def __init__(self, tk_master, roll_function, assign_function, end_turn_function):
+        """
+        The constructor for yahtzee game play view
 
+        Args:
+            tk_master (obj): the tkinter master view object or window the yahtzee game will be packed into
+            roll_function (obj): the function that is run when the roll sdice button is clicked
+            assign_function (obj): the function that is executed when the assign roll button is clicked
+            end_turn_function (obj): the function that is executed when the end turn button is clicked
+        """
 
         self._main_frame = tk.Frame(tk_master)
         master = self._main_frame
@@ -149,17 +184,20 @@ class YahtzeeView:
         self._lbl_instructions.grid(row=0, column=0, sticky=N + S + E + W)
 
     def lock_commands(self):
+        """Disables the command buttons from being able to be clicked"""
         self._btn_assign_roll.config(state=DISABLED)
         self._btn_end_turn.config(state=DISABLED)
         self._btn_roll.config(state=DISABLED)
 
     def unlock_commands(self):
+        """Enables the command buttons so they can be clicked"""
         self._btn_assign_roll.config(state=NORMAL)
         self._btn_end_turn.config(state=NORMAL)
         self._btn_roll.config(state=NORMAL)
 
     @property
     def instructions(self):
+        """str: The instructions displayed on the game view"""
         return self._instructions.get()
 
     @instructions.setter
@@ -168,6 +206,7 @@ class YahtzeeView:
 
     @property
     def player_name(self):
+        """str: The name of the current player"""
         return self.player_name.get()
 
     @player_name.setter
@@ -176,6 +215,7 @@ class YahtzeeView:
 
     @property
     def avatar_image(self):
+        """str: The file path to the avatar file of the current player"""
         return self._avatar_image
 
     @avatar_image.setter
@@ -184,18 +224,43 @@ class YahtzeeView:
         self._avatar_image_box.configure(image=self.avatar_image)
 
     def update_die(self, die_index, value):
-        """Update a die at a certain index within the yahtzee game"""
+        """
+        Update the value displayed on a die at a given index in the game view
+
+        Args:
+            die_index (int): The index of the die to update
+            value (int): The value to display on the die
+        """
         self._dice[die_index].last_roll = value
 
     def die_selected(self, die_index):
-        """Get whether or not the die at the given index is selected to roll or now"""
+        """
+        Get whether or not a die is selected
+
+        Args:
+            die_index (int): The index of the die to retrieve the selected status
+        """
         return self._dice[die_index].selected
 
     def update_die_selected(self, die_index, selected):
+        """
+        Update whether or not a die is selected
+
+        Args:
+            die_index (int): The index of the die to update
+            selected (bool): Whether or not the die is selected
+        """
         self._dice[die_index].selected = selected
 
     def update_box(self, box_name, points, enabled):
-        """Update one of the score boxes within the yahtzee game view"""
+        """
+        Update a box on the score card (points/enabled) given a certain box nam e
+
+        Args:
+            box_name (str): The name of the box to update
+            points (int): The number of points to display in the box
+            enabled (bool): Whether or not the box can be selected/is enabled
+        """
         self._score_card.assign_points(box_name, points)
         self._score_card.box_enabled(box_name, enabled)
 
@@ -217,14 +282,12 @@ class YahtzeeView:
     def show_view(self):
         """
         Packs the objects into the master TK object
-        :return: None
         """
         self._main_frame.pack()
 
     def hide_view(self):
         """
         Hides the objects into the master TK object
-        :return: None
         """
         self._main_frame.pack_forget()
 

@@ -8,7 +8,6 @@ from Bot import *
 
 
 class Yahtzee:
-
     def __init__(self, tk_master):
         self._master_tk = tk_master
         # Main views
