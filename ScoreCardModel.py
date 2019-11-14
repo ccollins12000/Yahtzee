@@ -1,4 +1,14 @@
+"""Score Card object
 
+This module contains code for a yahtzee score card and functions to support calculating scores and analyzing groups of dice
+
+Attributes:
+    assign_function_lookup (dict):
+        give a score box name return the function for calculating the points if a roll is assigned to that box.  Box names in include:
+        Aces, Twos, Threes, Fours, Fives, Sixes, 3 of a Kind, 4 of a Kind, Small Straight, Large Straight, Full House, Yahtzee, Chance
+    score_box_value_lookup (dict):
+        for looking up the upper section score box applicable to a given dice value. Example: 1 returns Aces
+"""
 
 
 def dice_roll_count(dice_list, value_to_count):
@@ -171,7 +181,7 @@ def four_of_a_kind_points(dice_list):
 
 
 def full_house_points(dice_list):
-    """Calculate the number of points based on a full house scorebox
+    """Calculate the number of points based on a full house score box
 
     Args:
         dice_list (obj): A list object containing either numbers or dice objects
@@ -186,6 +196,14 @@ def full_house_points(dice_list):
 
 
 def small_straight_points(dice_list):
+    """Calculate the number of points based on a small straight score box
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the number of points for a small straight score box
+    """
     if straight_size(dice_list) >= 4 or check_yahtzee(dice_list):
         return 30
     else:
@@ -193,6 +211,14 @@ def small_straight_points(dice_list):
 
 
 def large_straight_points(dice_list):
+    """Calculate the number of points based on a large straight score box
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the number of points for a large straight score box
+    """
     if straight_size(dice_list) >= 5 or check_yahtzee(dice_list):
         return 40
     else:
@@ -200,6 +226,14 @@ def large_straight_points(dice_list):
 
 
 def yahtzee_points(dice_list):
+    """Calculate the number of points based on a Yahtzee score box
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the number of points for a Yahtzee score box
+    """
     if of_a_kind_size(dice_list) >= 5:
         return 50
     else:
@@ -207,6 +241,14 @@ def yahtzee_points(dice_list):
 
 
 def chance_points(dice_list):
+    """Calculate the number of points based on a chance score box
+
+    Args:
+        dice_list (obj): A list object containing either numbers or dice objects
+
+    Returns:
+        int: Returns the number of points for a chance score box
+    """
     return sum(dice_list)
 
 
