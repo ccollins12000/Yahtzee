@@ -1,19 +1,33 @@
+view_to_model = {
+    'Aces': 'Aces',
+    'Twos': 'Twos',
+    'Threes': 'Threes',
+    'Fours': 'Fours',
+    'Fives': 'Fives',
+    'Sixes': 'Sixes',
+    '3 of a Kind': '3 of a Kind',
+    '4 of a Kind': '4 of a Kind',
+    'Full House': 'Full House',
+    'Small Straight': 'Small Straight',
+    'Large Straight': 'Large Straight',
+    'Yahtzee': 'Yahtzee',
+    'Chance': 'Chance',
+    'Bonus': 'Bonus',
+    'Upper Total': 'Upper Total',
+    'Lower Total': 'Lower Total',
+    'Grand Total': 'Grand Total'
+}
+
+
 class ScoreCardController(object):
     def __init__(self, view, model):
         self._view = view
         self._model = model
-        self.view_to_model = {
-            'Aces': 'Aces', 'Twos': 'Twos', 'Threes': 'Threes', 'Fours': 'Fours', 'Fives': 'Fives', 'Sixes': 'Sixes',
-            '3 of a Kind': '3 of a Kind', '4 of a Kind': '4 of a Kind', 'Full House': 'Full House',
-            'Small Straight': 'Small Straight', 'Large Straight': 'Large Straight', 'Yahtzee': 'Yahtzee',
-            'Chance': 'Chance', 'Bonus': 'Bonus', 'Upper Total': 'Upper Total', 'Lower Total': 'Lower Total',
-            'Grand Total': 'Grand Total'
-        }
 
     def update_view(self):
-        for box in self.view_to_model:
+        for box in view_to_model:
             view_name = box
-            model_name = self.view_to_model[box]
+            model_name = view_to_model[box]
             model_points = self._model.get_box_points(model_name)
             model_assigned = self._model.get_box_assigned(model_name)
 

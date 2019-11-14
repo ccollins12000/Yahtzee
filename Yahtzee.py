@@ -9,21 +9,6 @@ from Bot import *
 
 class Yahtzee:
     def __init__(self, tk_master):
-        self.view_to_model = {
-            'Aces': 'Aces', 'Twos': 'Twos', 'Threes': 'Threes', 'Fours': 'Fours', 'Fives': 'Fives', 'Sixes': 'Sixes',
-            '3 of a Kind': '3 of a Kind', '4 of a Kind': '4 of a Kind', 'Full House': 'Full House',
-            'Small Straight': 'Small Straight', 'Large Straight': 'Large Straight', 'Yahtzee': 'Yahtzee',
-            'Chance': 'Chance', 'Bonus': 'Bonus', 'Upper Total': 'Upper Total', 'Lower Total': 'Lower Total',
-            'Grand Total': 'Grand Total'
-        }
-        self.box_values = {
-            'Aces': 1,
-            'Twos': 2,
-            'Threes': 3,
-            'Fours': 4,
-            'Fives': 5,
-            'Sixes': 6
-        }
         self._master_tk = tk_master
         # Main views
         self._view = YahtzeeGameViews.YahtzeeView(self._master_tk, self.roll_dice, self.assign_roll, self.next_turn)
@@ -123,7 +108,7 @@ class Yahtzee:
         self.update_view()
 
     def assign_roll(self):
-        box_name = self.view_to_model[self._view.selected_box]
+        box_name = view_to_model[self._view.selected_box]
         self._model.assign_roll(box_name)
         self.update_view()
 
