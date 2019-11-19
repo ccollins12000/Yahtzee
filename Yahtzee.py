@@ -5,7 +5,7 @@ from PlayerModel import *
 from Controllers import *
 import time
 from Bot import *
-
+# Used http://google.github.io/styleguide/pyguide.html for format on doc strings
 
 class Yahtzee:
     def __init__(self, tk_master):

@@ -7,7 +7,6 @@ This module contains the logic code for a yahtzee game
 from DieModel import *
 from ScoreCardModel import *
 
-
 class YahtzeeModel:
     """All the logic code for running a yahtzee game
 
