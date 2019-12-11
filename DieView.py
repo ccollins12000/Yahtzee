@@ -24,7 +24,7 @@ class DieView:
             Exception: If the value is not between 1 and 6, an error is raised.  This isn't some fancy D&D game, it's just a boring old Yahtzee game!
         """
         self._last_roll = initial_roll
-        self._image = PhotoImage(file="Die" + str(self._last_roll) + "_selected.png")
+        self._image = PhotoImage(file="dice_images/Die" + str(self._last_roll) + "_selected.png")
         self._selected = IntVar(value=1)
         self.view = tk.Label(master, image=self._image)
         self.view.bind("<Button-1>", self.toggle_selected)
@@ -40,10 +40,10 @@ class DieView:
             selected (bool): Whether or not the die shows as selected
         """
         if selected == 1:
-            self._image = PhotoImage(file="Die" + str(value) + "_selected.png")
+            self._image = PhotoImage(file="dice_images/Die" + str(value) + "_selected.png")
 
         else:
-            self._image = PhotoImage(file="Die" + str(value) + ".png")
+            self._image = PhotoImage(file="dice_images/Die" + str(value) + ".png")
         self.view.configure(image=self._image)
 
     def toggle_selected(self, event):

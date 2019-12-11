@@ -87,7 +87,7 @@ class PlayersView:
         row_count = 6 # all avatar images in directory will get packed into rows and columns
         self.main_frame = tk.Frame(master)
         player_names = ["Player1", "Player2", "Player3", "Player4", "Player5", "Player6"]
-        self.players = [PlayerView(self.main_frame, "Avatar" + str(index) + ".png", player_names[index]) for index in range(6)]
+        self.players = [PlayerView(self.main_frame, "avatar_images/Avatar" + str(index) + ".png", player_names[index]) for index in range(6)]
         for index, player in enumerate(self.players):
             player.main_frame.grid(row=int(index/row_count), column=index%row_count)
         # button for adding players
@@ -296,10 +296,10 @@ def main():
     """Preview of the Game Views"""
     yahtzee_tk = Tk()
     y = GameSummary(yahtzee_tk)
-    y.add_player("Avatar0.png", "Player1")
-    y.add_player("Avatar1.png", "Player2")
-    y.add_player("Avatar2.png", "Player3")
-    y.add_player("Avatar3.png", "Player4")
+    y.add_player("avatar_images/Avatar0.png", "Player1")
+    y.add_player("avatar_images/Avatar1.png", "Player2")
+    y.add_player("avatar_images/Avatar2.png", "Player3")
+    y.add_player("avatar_images/Avatar3.png", "Player4")
     y.show_view()
     yahtzee_tk.mainloop()
 
